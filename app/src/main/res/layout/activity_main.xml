@@ -1,18 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    tools:context=".MainActivity"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_width="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/appCompatImageView"
+                android:layout_width="@dimen/avatar_size"
+                android:layout_height="@dimen/avatar_size"
+                android:layout_marginTop="@dimen/avatar_margin"
+                android:src="@drawable/avatar_image_placeholder"/>
+
+            <EditText
+                android:id="@+id/nickname"
+                android:hint="@string/enter_nickname"
+                style="@style/textfield_style"
+                android:layout_marginTop="@dimen/nick_margin"
+                android:autofillHints="enter_nickname"
+                android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/pass"
+                android:hint="@string/enter_password"
+                style="@style/textfield_style"
+                android:layout_marginTop="@dimen/pass_margin"/>
+
+            <EditText
+                android:id="@+id/job"
+                android:hint="@string/job"
+                style="@style/textfield_style"
+                android:layout_marginTop="@dimen/job_margin"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/button_margin"
+                android:text="@string/sign_up"
+                android:textSize="@dimen/button_text_size"
+                android:backgroundTint="@color/button_color"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
+                android:clickable="true"/>
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

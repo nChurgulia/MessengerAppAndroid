@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MessengerApp</string>
+    <string name="enter_nickname">Enter your nickname</string>
+    <string name="enter_password">Enter your password</string>
+    <string name="job">What I do</string>
+    <string name="sign_up">sign up</string>
 </resources>
