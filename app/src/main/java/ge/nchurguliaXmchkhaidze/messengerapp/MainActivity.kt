@@ -2,6 +2,7 @@ package ge.nchurguliaXmchkhaidze.messengerapp
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,25 +18,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        setupKeyboardListener()
-    }
-
-    private fun setupKeyboardListener() {
-        findViewById<EditText>(R.id.nickname).onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
-            if (!p1){ hideSoftKeyboard(findViewById(R.id.nickname)) }
-        }
-
-        findViewById<EditText>(R.id.pass).onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
-            if (!p1){ hideSoftKeyboard(findViewById(R.id.nickname)) }
-        }
-
-        findViewById<EditText>(R.id.job).onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
-            if (!p1){ hideSoftKeyboard(findViewById(R.id.nickname)) }
-        }
     }
 }
 
-fun Activity.hideSoftKeyboard(editText: EditText){
-    (getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(editText.windowToken, 0)
+fun Activity.hideSoftKeyboard(id: Int){
+    findViewById<EditText>(id).onFocusChangeListener = View.OnFocusChangeListener { _, p1 ->
+        if (!p1){
+            (getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager).
+            hideSoftInputFromWindow((findViewById<EditText>(id)).windowToken, 0)
+        }
+    }
 }

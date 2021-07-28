@@ -12,4 +12,8 @@
     <dimen name="nick_margin">48dp</dimen>
     <dimen name="pass_margin">8dp</dimen>
     <dimen name="job_margin">16dp</dimen>
+    <dimen name="button_corner_radius">10dp</dimen>
+    <dimen name="button_border">2dp</dimen>
+    <dimen name="sign_in_margin">16dp</dimen>
+    <dimen name="registered_margin">80dp</dimen>
 </resources>

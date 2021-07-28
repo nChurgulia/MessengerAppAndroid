@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SignInPage"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/appCompatImageView"
+                android:layout_width="@dimen/avatar_size"
+                android:layout_height="@dimen/avatar_size"
+                android:layout_marginTop="@dimen/avatar_margin"
+                android:src="@drawable/avatar_image_placeholder"/>
+
+            <EditText
+                android:id="@+id/nickname_si"
+                android:hint="@string/enter_nickname"
+                style="@style/textfield_style"
+                android:layout_marginTop="@dimen/nick_margin"
+                android:autofillHints="enter_nickname"
+                android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/pass_si"
+                android:hint="@string/enter_password"
+                style="@style/textfield_style"
+                android:layout_marginTop="@dimen/pass_margin"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_in"
+                android:layout_marginTop="@dimen/sign_in_margin"
+                android:textSize="@dimen/button_text_size"
+                android:backgroundTint="@color/button_color"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
+                android:clickable="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/not_registered"
+                android:layout_marginTop="@dimen/registered_margin"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_up"
+                android:textSize="@dimen/button_text_size"
+                android:textColor="@color/black"
+                app:strokeColor="@color/black"
+                android:onClick="goToSignUp"
+                style="?attr/materialButtonOutlinedStyle" />
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>
