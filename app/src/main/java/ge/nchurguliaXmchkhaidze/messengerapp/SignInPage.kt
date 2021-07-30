@@ -16,7 +16,7 @@ class SignInPage : AppCompatActivity() {
     }
 
     fun goToSignUp(view: View) {
-        val intent = Intent(this, LogInPage::class.java)
+        val intent = Intent(this, SignUpPage::class.java)
         startActivity(intent)
     }
 }

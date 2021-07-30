@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity"
+    tools:context=".SignUpPage"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical">
@@ -47,15 +47,13 @@
                 android:layout_marginTop="@dimen/job_margin"/>
 
             <Button
+                android:id="@+id/sign_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/button_margin"
                 android:text="@string/sign_up"
                 android:textSize="@dimen/button_text_size"
-                android:backgroundTint="@color/button_color"
-                android:focusableInTouchMode="true"
-                android:focusable="true"
-                android:clickable="true"/>
+                android:backgroundTint="@color/button_color"/>
         </LinearLayout>
 
     </ScrollView>

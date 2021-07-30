@@ -16,4 +16,12 @@
     <dimen name="button_border">2dp</dimen>
     <dimen name="sign_in_margin">16dp</dimen>
     <dimen name="registered_margin">80dp</dimen>
+    <dimen name="pict_radius">84dp</dimen>
+    <dimen name="update_margin">48dp</dimen>
+    <dimen name="bottom_appbar_margin">80dp</dimen>
+    <dimen name="bubble_width">240dp</dimen>
+    <dimen name="bubble_margin">24dp</dimen>
+    <dimen name="msg_field_padding">20dp</dimen>
+    <dimen name="chat_margin">8dp</dimen>
+    <dimen name="fab_margin">10dp</dimen>
 </resources>

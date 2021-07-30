@@ -6,4 +6,10 @@
     <string name="sign_up">sign up</string>
     <string name="not_registered">Not registered?</string>
     <string name="sign_in">sign in</string>
+    <string name="sign_out">sign out</string>
+    <string name="update">Update</string>
+    <string name="message">Message</string>
+    <string name="empty_nick">Enter nickname</string>
+    <string name="empty_pass">Enter password</string>
+    <string name="empty_job">Enter what you do</string>
 </resources>
