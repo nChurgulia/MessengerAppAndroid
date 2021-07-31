@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MessengerApp">
-        <activity android:name=".LogInPage"></activity>
+<!--        <meta-data-->
+<!--            android:name="com.google.android.actions"-->
+<!--            android:resource="@xml/search_view_background" />-->
+
+        <activity android:name=".ChatSearchPage"></activity>
+        <activity android:name=".LogInPage" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SignInPage">
             <intent-filter>
