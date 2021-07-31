@@ -10,7 +10,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MessengerApp">
-        <activity android:name=".ChatPage">
+<!--        <meta-data-->
+<!--            android:name="com.google.android.actions"-->
+<!--            android:resource="@xml/search_view_background" />-->
+
+        <activity android:name=".ChatSearchPage"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".SignInPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,11 +25,9 @@
         </activity>
         <activity
             android:name=".ProfilePage"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ChatPage"/>
         <activity android:name=".SignUpPage" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SignInPage" />
     </application>
 
 </manifest>
