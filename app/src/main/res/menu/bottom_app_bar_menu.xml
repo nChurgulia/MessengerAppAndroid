@@ -4,14 +4,14 @@
 
 <item
     android:id="@+id/home"
-    android:title="home"
+    android:title="@string/home"
     android:icon="@drawable/ic_baseline_home_24"
     app:showAsAction="ifRoom"/>
 
 
 <item
     android:id="@+id/profile"
-    android:title="profile"
+    android:title="@string/profile"
     android:icon="@drawable/ic_baseline_settings_24"
     app:showAsAction="ifRoom"/>
 </menu>

@@ -10,13 +10,20 @@ import java.util.*
 
 
 class ChatPage : AppCompatActivity() {
-    var list: ArrayList<String> = ArrayList()
-    var adapter = ConversationPageAdapter()
+    private var list: ArrayList<String> = ArrayList()
+    private var adapter = ConversationPageAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_page)
 
+        setUpRV()
+        addMsgSentListener()
+        hideSoftKeyboard(R.id.message_txt)
+        scrollChat()
+    }
+
+    private fun setUpRV(){
         val recyclerView = findViewById<RecyclerView>(R.id.messages)
         recyclerView.adapter = adapter
 
@@ -25,15 +32,11 @@ class ChatPage : AppCompatActivity() {
                 scrollChat()
             }
         }
-
-        scrollChat()
-        addMsgSentListener()
-        hideSoftKeyboard(R.id.message_txt)
     }
 
     private fun addMsgSentListener(){
         findViewById<TextInputLayout>(R.id.msg_field).setEndIconOnClickListener {
-            var txt = findViewById<TextInputEditText>(R.id.message_txt).text.toString().trim()
+            val txt = findViewById<TextInputEditText>(R.id.message_txt).text.toString().trim()
             if(txt != "") {
                 list.add(txt)
                 adapter.list = list

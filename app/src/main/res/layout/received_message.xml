@@ -17,7 +17,6 @@
         android:maxWidth="@dimen/bubble_width"
         android:background="@drawable/reply_bubble"
         android:includeFontPadding="false"
-        android:text="yfuvygib sjh sjdh sjhd sjdh sjdh sjh sjhd jhsd jh ajh"
         android:textColor="@color/dot_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +26,6 @@
         android:id="@+id/received_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="18:20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

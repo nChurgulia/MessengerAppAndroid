@@ -12,4 +12,8 @@
     <string name="empty_nick">Enter nickname</string>
     <string name="empty_pass">Enter password</string>
     <string name="empty_job">Enter what you do</string>
+    <string name="home">home</string>
+    <string name="profile">profile</string>
+    <string name="profile_photo">Profile Photo</string>
+    <string name="search">Search</string>
 </resources>

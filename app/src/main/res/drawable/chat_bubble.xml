@@ -5,12 +5,12 @@
 
     <corners
         android:bottomRightRadius="0dp"
-        android:radius="40dp" />
+        android:radius="@dimen/bubble_corner_radius" />
 
     <padding
-         android:left="40dp"
-         android:top="20dp"
-         android:right="40dp"
-         android:bottom="20dp" />
+        android:left="@dimen/bubble_padding_horizontal"
+        android:top="@dimen/padding_bubble_vertical"
+        android:right="@dimen/bubble_padding_horizontal"
+        android:bottom="@dimen/padding_bubble_vertical" />
 
 </shape>
