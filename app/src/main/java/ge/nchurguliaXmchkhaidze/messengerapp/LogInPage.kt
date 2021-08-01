@@ -2,6 +2,8 @@ package ge.nchurguliaXmchkhaidze.messengerapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.firebase.auth.FirebaseAuth
+//import com.google.firebase.ktx.Firebase
 
 class LogInPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -11,5 +13,6 @@ class LogInPage : AppCompatActivity() {
         hideSoftKeyboard(R.id.nickname_su)
         hideSoftKeyboard(R.id.pass_su)
         hideSoftKeyboard(R.id.job_su)
+
     }
 }
