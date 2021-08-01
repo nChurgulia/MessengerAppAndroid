@@ -3,6 +3,10 @@
     package="ge.nchurguliaXmchkhaidze.messengerapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,12 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MessengerApp">
-<!--        <meta-data-->
-<!--            android:name="com.google.android.actions"-->
-<!--            android:resource="@xml/search_view_background" />-->
-
-        <activity android:name=".ChatSearchPage"></activity>
-        <activity android:name=".LogInPage" />
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.actions" -->
+        <!-- android:resource="@xml/search_view_background" /> -->
+        <activity android:name=".ChatSearchPage" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SignInPage">
             <intent-filter>
@@ -24,6 +26,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ProfilePage"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".ChatPage" />
+        <activity android:name=".SignUpPage" />
+        <activity android:name=".UserSearchPage"/>
     </application>
 
 </manifest>

@@ -1,10 +1,13 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ChatSearchPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,6 +18,7 @@ class ChatSearchPage : AppCompatActivity() {
         val secondPageA = SearchPageAdapter(this, currList)
         chatPageRV.adapter = secondPageA
         chatPageRV.setLayoutManager(LinearLayoutManager(this))
+        setUpNavBar()
     }
 
     private fun getData(): MutableList<chatInfo> {
@@ -27,5 +31,32 @@ class ChatSearchPage : AppCompatActivity() {
         return  currList
     }
 
+    private fun setUpNavBar(){
+        findViewById<BottomNavigationView>(R.id.bottomNavigationView).setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> {
+                    true
+                }
+                R.id.profile -> {
+                    goToProfile()
+                    true
+                }
+                else -> false
+            }
+        }
 
+        findViewById<FloatingActionButton>(R.id.add_btn).setOnClickListener {
+            goToUserSearch()
+        }
+    }
+
+    private fun goToProfile() {
+        val intent = Intent(this, ProfilePage::class.java)
+        startActivity(intent)
+    }
+
+    private fun goToUserSearch() {
+        val intent = Intent(this, UserSearchPage::class.java)
+        startActivity(intent)
+    }
 }

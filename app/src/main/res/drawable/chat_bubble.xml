@@ -1,0 +1,16 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/button_color" />
+
+    <corners
+        android:bottomRightRadius="0dp"
+        android:radius="@dimen/bubble_corner_radius" />
+
+    <padding
+        android:left="@dimen/bubble_padding_horizontal"
+        android:top="@dimen/padding_bubble_vertical"
+        android:right="@dimen/bubble_padding_horizontal"
+        android:bottom="@dimen/padding_bubble_vertical" />
+
+</shape>
