@@ -22,6 +22,11 @@ class ProfilePage : AppCompatActivity() {
         hideSoftKeyboard(R.id.job_pr)
     }
 
+    override fun onStart() {
+        super.onStart()
+        findViewById<BottomNavigationView>(R.id.bottomNavigationView).menu.getItem(1).isChecked = true
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == OPEN_GALLERY) {
@@ -46,7 +51,7 @@ class ProfilePage : AppCompatActivity() {
     }
 
     private fun updateInfo() {
-        
+
     }
 
     private fun setUpImageView(){
@@ -58,7 +63,6 @@ class ProfilePage : AppCompatActivity() {
 
     private fun setUpNavBar(){
         val navView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        navView.menu.getItem(1).isChecked = true
         navView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {

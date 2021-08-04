@@ -17,7 +17,10 @@
         <!-- <meta-data -->
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/search_view_background" /> -->
-        <activity android:name=".ChatSearchPage" />
+        <activity
+            android:name=".ChatSearchPage"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".SignInPage">
             <intent-filter>
