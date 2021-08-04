@@ -17,14 +17,19 @@
         <!-- <meta-data -->
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/search_view_background" /> -->
-        <activity android:name=".ChatSearchPage" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SignInPage">
+        <activity
+            android:name=".ChatSearchPage"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+
+        <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".SignInPage">
         </activity>
         <activity
             android:name=".ProfilePage"

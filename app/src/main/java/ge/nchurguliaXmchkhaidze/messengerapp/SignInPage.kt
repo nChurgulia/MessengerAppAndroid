@@ -9,35 +9,40 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
 
 class SignInPage : AppCompatActivity() {
-    lateinit var  signUpButton : Button
-    lateinit var  signInButton : Button
-    lateinit var emailField: TextView
-    lateinit var passwordField : TextView
+    private lateinit var  signUpButton : Button
+    private lateinit var  signInButton : Button
+    private lateinit var emailField: TextView
+    private lateinit var passwordField : TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in_page)
+
+        initViews()
 
         setUpSignInButton()
         setUpSignUpButton()
         hideSoftKeyboard(R.id.nickname_si)
         hideSoftKeyboard(R.id.pass_si)
-        emailField = findViewById<TextView>(R.id.nickname_si)
-        passwordField = findViewById<TextView>(R.id.pass_si)
-        signUpButton = findViewById<Button>(R.id.sign_up_button)
-        signInButton = findViewById<Button>(R.id.sign_in_button)
+    }
+
+    fun initViews(){
+        emailField = findViewById(R.id.nickname_si)
+        passwordField = findViewById(R.id.pass_si)
+        signUpButton = findViewById(R.id.sign_up_button)
+        signInButton = findViewById(R.id.sign_in_button)
     }
 
 
     private fun setUpSignUpButton(){
-        findViewById<Button>(R.id.sign_up_button).setOnClickListener {
+        signUpButton.setOnClickListener {
             goToSignUp()
         }
     }
 
     private fun setUpSignInButton(){
         findViewById<Button>(R.id.sign_in_button).setOnClickListener {
-            accountAccess.logIn(emailField.text.toString() + getString(R.string.mail_suffix),passwordField.text.toString(), this::goToConversations )
-        }
+            accountAccess.logIn(emailField.text.toString() + getString(R.string.mail_suffix),passwordField.text.toString(), this::goToConversations ) }
     }
 
     private fun goToSignUp() {

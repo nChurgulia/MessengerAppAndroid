@@ -33,7 +33,7 @@
                     android:id="@+id/profile_pic"
                     android:layout_width="@dimen/avatar_size"
                     android:layout_height="@dimen/avatar_size"
-                    android:src="@drawable/avatar_image_placeholder"
+                    tools:src="@drawable/avatar_image_placeholder"
                     android:background="@color/white"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/profile_photo" />

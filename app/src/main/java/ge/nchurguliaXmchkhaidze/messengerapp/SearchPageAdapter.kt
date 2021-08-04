@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class SearchPageAdapter ( private val context : Context , private val items: MutableList< chatInfo > ) : RecyclerView.Adapter<SearchPageAdapter.SearchPageVH>() {
+class SearchPageAdapter ( private val context : Context , private val items: MutableList< chatInfo >, private val listListener: UserSearchInterface) : RecyclerView.Adapter<SearchPageAdapter.SearchPageVH>() {
 
     inner class SearchPageVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val view = itemView
@@ -30,6 +30,10 @@ class SearchPageAdapter ( private val context : Context , private val items: Mut
 
     override fun onBindViewHolder(holder: SearchPageVH, position: Int) {
         val chat = items[position]
+
+        holder.itemView.setOnClickListener {
+            listListener.goToChat((holder.itemView.findViewById(R.id.chat_info_name_view) as TextView).text.toString())
+        }
 
         // Profile Name
         holder.name.text = chat.name

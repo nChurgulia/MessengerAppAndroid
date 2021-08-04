@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 
 class ProfilePage : AppCompatActivity() {
     private var photoUri : Uri? = null
@@ -36,6 +37,11 @@ class ProfilePage : AppCompatActivity() {
         setUpImageView()
         setUpNavBar()
         hideSoftKeyboard(R.id.job_pr)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        findViewById<BottomNavigationView>(R.id.bottomNavigationView).menu.getItem(1).isChecked = true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -84,6 +90,7 @@ class ProfilePage : AppCompatActivity() {
     }
     private fun setUpLogOut(){
         signoutButton.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
             goToSignIn()
         }
     }
@@ -110,7 +117,6 @@ class ProfilePage : AppCompatActivity() {
 
     private fun setUpNavBar(){
         val navView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        navView.menu.getItem(1).isChecked = true
         navView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
