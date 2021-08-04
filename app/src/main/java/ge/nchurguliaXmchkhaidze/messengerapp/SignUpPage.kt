@@ -30,15 +30,15 @@ class SignUpPage : AppCompatActivity() {
                 else -> goToConversations()
             }
 
-            var success = accountAccess.signUp(nick + getString(R.string.mail_suffix), pass)
-            if(success){
-                goToConversations()
-            }
+            accountAccess.signUp(nick + getString(R.string.mail_suffix), pass, job, this::goToConversations)
+
         }
     }
 
-    private fun goToConversations() {
+    private fun goToConversations() : Boolean {
         val intent = Intent(this, ChatSearchPage::class.java)
         startActivity(intent)
+        return false
     }
+
 }
