@@ -1,12 +1,9 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 
 class SignInPage : AppCompatActivity() {
     private lateinit var  signUpButton : Button
@@ -26,7 +23,11 @@ class SignInPage : AppCompatActivity() {
         hideSoftKeyboard(R.id.pass_si)
     }
 
-    fun initViews(){
+    override fun onBackPressed() {
+
+    }
+
+    private fun initViews(){
         emailField = findViewById(R.id.nickname_si)
         passwordField = findViewById(R.id.pass_si)
         signUpButton = findViewById(R.id.sign_up_button)
@@ -36,7 +37,7 @@ class SignInPage : AppCompatActivity() {
 
     private fun setUpSignUpButton(){
         signUpButton.setOnClickListener {
-            goToSignUp()
+            goToPage(this, SignUpPage::class.java)
         }
     }
 
@@ -45,16 +46,9 @@ class SignInPage : AppCompatActivity() {
             accountAccess.logIn(emailField.text.toString() + getString(R.string.mail_suffix),passwordField.text.toString(), this::goToConversations ) }
     }
 
-    private fun goToSignUp() {
-        val intent = Intent(this, SignUpPage::class.java)
-        startActivity(intent)
-    }
 
     private fun goToConversations(): Boolean {
-        val intent = Intent(this, ChatSearchPage::class.java)
-        startActivity(intent)
+        goToPage(this, ChatSearchPage::class.java)
         return true
     }
-
-
 }

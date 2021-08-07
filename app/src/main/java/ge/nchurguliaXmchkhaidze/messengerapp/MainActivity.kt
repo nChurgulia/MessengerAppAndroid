@@ -1,6 +1,7 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -15,13 +16,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var intent : Intent
         if(FirebaseAuth.getInstance().currentUser == null){
-            intent = Intent(this, SignInPage::class.java)
+            goToPage(this, SignInPage::class.java)
         }else{
-            intent = Intent(this, ChatSearchPage::class.java)
+            goToPage(this, ChatSearchPage::class.java)
         }
-        startActivity(intent)
     }
 }
 
@@ -40,4 +39,9 @@ fun Activity.hideSoftKeyboard(id: Int){
 fun Activity.showWarning(id: Int, txt: String){
     val contextView = findViewById<View>(id)
     Snackbar.make(contextView, txt, Snackbar.LENGTH_SHORT).show()
+}
+
+fun goToPage(context: Context, pageClass: Class<*>) {
+    val intent = Intent(context, pageClass)
+    context.startActivity(intent)
 }

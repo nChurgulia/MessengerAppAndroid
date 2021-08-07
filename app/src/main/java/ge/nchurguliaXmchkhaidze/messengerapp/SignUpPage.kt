@@ -1,6 +1,5 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -27,17 +26,13 @@ class SignUpPage : AppCompatActivity() {
                 nick == "" -> showWarning(R.id.sign_up, getString(R.string.empty_nick))
                 pass == "" -> showWarning(R.id.sign_up, getString(R.string.empty_pass))
                 job == ""-> showWarning(R.id.sign_up, getString(R.string.empty_job))
-                else -> goToConversations()
+                else -> accountAccess.signUp(nick + getString(R.string.mail_suffix), pass, job, this::goToConversations)
             }
-
-            accountAccess.signUp(nick + getString(R.string.mail_suffix), pass, job, this::goToConversations)
-
         }
     }
 
     private fun goToConversations() : Boolean {
-        val intent = Intent(this, ChatSearchPage::class.java)
-        startActivity(intent)
+        goToPage(this, ChatSearchPage::class.java)
         return false
     }
 

@@ -1,17 +1,13 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -54,11 +50,11 @@ class ProfilePage : AppCompatActivity() {
     }
 
     private fun initViews(){
-        nickView = findViewById<TextView>(R.id.nickname_pr)
-        jobView = findViewById<TextView>(R.id.job_pr)
-        photoView = findViewById<ImageView>(R.id.profile_pic)
-        updateButton = findViewById<Button>(R.id.update)
-        signoutButton = findViewById<Button>(R.id.sign_out)
+        nickView = findViewById(R.id.nickname_pr)
+        jobView = findViewById(R.id.job_pr)
+        photoView = findViewById(R.id.profile_pic)
+        updateButton = findViewById(R.id.update)
+        signoutButton = findViewById(R.id.sign_out)
 
     }
 
@@ -75,11 +71,11 @@ class ProfilePage : AppCompatActivity() {
         return true
     }
     private fun displayJob(job:String): Boolean{
-        jobView.setText(job)
+        jobView.text = job
         return true
     }
     private fun displayNick(nick:String): Boolean{
-        nickView.setText(nick)
+        nickView.text = nick
         return true
     }
 
@@ -91,13 +87,8 @@ class ProfilePage : AppCompatActivity() {
     private fun setUpLogOut(){
         signoutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            goToSignIn()
+            goToPage(this, SignInPage::class.java)
         }
-    }
-
-    private fun goToSignIn() {
-        val intent = Intent(this, SignInPage::class.java)
-        startActivity(intent)
     }
 
     private fun updateInfo() {
@@ -120,7 +111,7 @@ class ProfilePage : AppCompatActivity() {
         navView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
-                    goToConversations()
+                    goToPage(this, ChatSearchPage::class.java)
                     true
                 }
                 R.id.profile -> {
@@ -131,18 +122,8 @@ class ProfilePage : AppCompatActivity() {
         }
 
         findViewById<FloatingActionButton>(R.id.add_btn).setOnClickListener {
-            goToUserSearch()
+            goToPage(this, UserSearchPage::class.java)
         }
-    }
-
-    private fun goToConversations() {
-        val intent = Intent(this, ChatSearchPage::class.java)
-        startActivity(intent)
-    }
-
-    private fun goToUserSearch() {
-        val intent = Intent(this, UserSearchPage::class.java)
-        startActivity(intent)
     }
 
     companion object {

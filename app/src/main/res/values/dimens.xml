@@ -42,4 +42,11 @@
     <dimen name="conversations_margin">16dp</dimen>
     <dimen name="msg_margin">32dp</dimen>
     <dimen name="user_img_margin">8dp</dimen>
+    <dimen name="search_field_padding">10dp</dimen>
+    <dimen name="back_arrow_size">32dp</dimen>
+    <dimen name="toolbar_padding">20dp</dimen>
+    <dimen name="exp_title">24sp</dimen>
+    <dimen name="exp_title_padding">8dp</dimen>
+    <dimen name="exp_subtitle">16sp</dimen>
+    <dimen name="chat_image_size">50dp</dimen>
 </resources>
