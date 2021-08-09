@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +25,7 @@ class ChatSearchPage : AppCompatActivity(), UserSearchInterface {
         chatPageRV.setLayoutManager(LinearLayoutManager(this))
         chatPageRV.setOnTouchListener { v, event ->
             (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).
-            hideSoftInputFromWindow((findViewById<androidx.appcompat.widget.SearchView>(R.id.search_field)).windowToken, 0)
+            hideSoftInputFromWindow(findViewById<EditText>(R.id.search_field).windowToken, 0)
             v?.onTouchEvent(event) ?: true
         }
         setUpNavBar()
@@ -52,7 +53,7 @@ class ChatSearchPage : AppCompatActivity(), UserSearchInterface {
                     true
                 }
                 R.id.profile -> {
-                    goToProfile()
+                    goToPage(this, ProfilePage::class.java)
                     true
                 }
                 else -> false
@@ -60,22 +61,11 @@ class ChatSearchPage : AppCompatActivity(), UserSearchInterface {
         }
 
         findViewById<FloatingActionButton>(R.id.add_btn).setOnClickListener {
-            goToUserSearch()
+            goToPage(this, UserSearchPage::class.java)
         }
     }
 
-    private fun goToProfile() {
-        val intent = Intent(this, ProfilePage::class.java)
-        startActivity(intent)
-    }
-
-    private fun goToUserSearch() {
-        val intent = Intent(this, UserSearchPage::class.java)
-        startActivity(intent)
-    }
-
     override fun goToChat(user: String) {
-        val intent = Intent(this, ChatPage::class.java)
-        startActivity(intent)
+        goToPage(this, ChatPage::class.java)
     }
 }

@@ -38,9 +38,9 @@
             <EditText
                 android:id="@+id/pass_si"
                 android:hint="@string/enter_password"
-                android:inputType="text"
+                android:inputType="textPassword"
                 style="@style/textfield_style"
-                android:layout_marginTop="@dimen/pass_margin"/>
+                android:layout_marginTop="@dimen/pass_margin" />
 
             <Button
                 android:id="@+id/sign_in_button"

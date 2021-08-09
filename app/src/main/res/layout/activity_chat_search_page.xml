@@ -35,7 +35,7 @@
                 android:layout_height="@dimen/toolbar_height"
                 app:layout_collapseMode="pin"/>
 
-            <androidx.appcompat.widget.SearchView
+            <EditText
                 android:id="@+id/search_field"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/searchview_height"
@@ -43,9 +43,9 @@
                 android:background="@drawable/search_view_background"
                 app:layout_scrollFlags="scroll|enterAlways"
                 android:layout_margin="@dimen/searchview_margin"
-                app:defaultQueryHint="@string/search"
-                app:iconifiedByDefault="false"
-                app:searchIcon="@drawable/search_icon" />
+                android:hint="@string/search"
+                android:drawableStart="@drawable/search_icon"
+                android:paddingHorizontal="@dimen/search_field_padding"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

@@ -1,13 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ChatPage"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
-    android:clickable="true">
+    tools:context=".ChatPage">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/msg_field">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/Search_Collapsing_Bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/app_bar_height"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/button_color"
+                android:fitsSystemWindows="true"
+                app:contentScrim="@color/button_color"
+                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/toolbar_height"
+                    app:layout_collapseMode="pin"
+                    app:contentInsetStart="0dp"/>
+
+                <LinearLayout
+                    android:id="@+id/tool_bar_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom"
+                    android:padding="@dimen/toolbar_padding">
+
+                    <ImageButton
+                        android:id="@+id/back_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24"
+                        android:background="@color/button_color" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:orientation="vertical"
+                            android:layout_gravity="bottom"
+                            android:gravity="bottom">
+
+                            <TextView
+                                android:id="@+id/title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Sayed Eftiaz"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/exp_title"
+                                android:textStyle="bold"
+                                android:paddingVertical="@dimen/exp_title_padding"/>
+
+                            <TextView
+                                android:id="@+id/subtitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Manager"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/exp_subtitle"/>
+
+                        </LinearLayout>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="@dimen/chat_image_size"
+                            app:cardElevation="0dp"
+                            android:layout_gravity="center_vertical|end">
+
+                            <ImageView
+                                android:id="@+id/profile_pic"
+                                android:layout_width="@dimen/chat_image_size"
+                                android:layout_height="@dimen/chat_image_size"
+                                android:src="@drawable/avatar_image_placeholder"
+                                android:scaleType="centerCrop"
+                                android:contentDescription="@string/profile_photo" />
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/messages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:stackFromEnd="true"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/msg_field"
@@ -21,7 +128,8 @@
         app:endIconTint="@color/dot_color"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
-        app:endIconCheckable="true">
+        app:endIconCheckable="true"
+        android:layout_gravity="bottom">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/message_txt"
@@ -34,18 +142,5 @@
             android:padding="@dimen/msg_field_padding"/>
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/messages"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/msg_field"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:overScrollMode="never"
-        app:stackFromEnd="true"/>
 
 </RelativeLayout>

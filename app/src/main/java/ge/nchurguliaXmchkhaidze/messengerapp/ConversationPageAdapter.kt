@@ -6,27 +6,36 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.util.CollectionUtils.listOf
+import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ConversationPageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var list: ArrayList<String> = ArrayList()
+    var list: ArrayList<MessageInfo> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == SENT) {
-            ViewHolder1(
+            SentMsgHolder(
                 LayoutInflater.from(parent.context).inflate(R.layout.sent_message, parent, false)
             )
         } else {
-            ViewHolder2(
+            ReceivedMsgHolder(
                 LayoutInflater.from(parent.context).inflate(R.layout.received_message, parent, false)
             )
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        holder as ViewHolder1
-        val msg = list[position]
-        holder.bindMsg(msg)
+        val msgInfo = list[position]
+        val currentDate = SimpleDateFormat("HH:mm").format(Date(msgInfo.sendTime))
+
+        if (getItemViewType(position) == SENT) {
+            holder as SentMsgHolder
+            holder.bindMsg(msgInfo.sender, msgInfo.receiver, msgInfo.content, currentDate)
+        }else{
+            holder as ReceivedMsgHolder
+            holder.bindMsg(msgInfo.sender, msgInfo.receiver, msgInfo.content, currentDate)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -34,19 +43,32 @@ class ConversationPageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
     }
 
     override fun getItemViewType(position: Int): Int {
-        return SENT
+        var uid = FirebaseAuth.getInstance().uid
+        if (list[position].sender == uid){
+            return SENT
+        }
+        return RECEIVED
     }
 
-    inner class ViewHolder1(view: View) : RecyclerView.ViewHolder(view) {
-        fun bindMsg(msg: String) {
-            txtName.text = msg
+    inner class SentMsgHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bindMsg(sender: String, receiver: String, content: String, sendTime: String) {
+            txtName.text = content
+            time.text = sendTime
         }
 
         private val txtName = view.findViewById<TextView>(R.id.msg)
+        private val time = view.findViewById<TextView>(R.id.sent_time)
     }
 
-    inner class ViewHolder2(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ReceivedMsgHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+        fun bindMsg(sender: String, receiver: String, content: String, sendTime: String) {
+            txtName.text = content
+            time.text = sendTime
+        }
+
+        private val txtName = view.findViewById<TextView>(R.id.reply)
+        private val time = view.findViewById<TextView>(R.id.received_time)
     }
 
     companion object {
