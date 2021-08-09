@@ -1,7 +1,6 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -28,6 +27,7 @@ class UserSearchPage : AppCompatActivity(), UserSearchInterface {
             hideSoftInputFromWindow(findViewById<EditText>(R.id.search_field).windowToken, 0)
             v?.onTouchEvent(event) ?: true
         }
+        hideSoftKeyboard(R.id.search_field)
 
         setUpSearch()
     }
@@ -37,6 +37,8 @@ class UserSearchPage : AppCompatActivity(), UserSearchInterface {
     }
 
     private fun updateUserList(uid: String?, nickname: String?, job: String?, photo: String?): Boolean {
+
+        stopLoader()
 
         if (uid == null) {
             showWarning(R.id.search_field, getString(R.string.no_data))
@@ -48,8 +50,9 @@ class UserSearchPage : AppCompatActivity(), UserSearchInterface {
         return true
     }
 
-    override fun goToChat(user: String) {
-        goToPage(this, ChatPage::class.java)
+    override fun goToChat(user: String, job: String, photo: String) {
+        val extras = mapOf(Pair(getString(R.string.chat_user), user), Pair(getString(R.string.chat_user_job), job), Pair(getString(R.string.chat_user_photo), photo))
+        goToPage(this, ChatPage::class.java, extras)
     }
 
     @SuppressLint("CheckResult")
@@ -66,11 +69,14 @@ class UserSearchPage : AppCompatActivity(), UserSearchInterface {
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
+                findViewById<EditText>(R.id.search_field).clearFocus()
+                startLoader()
                 adapter.list.clear()
                 adapter.notifyDataSetChanged()
                 ManageInfo.filterUsers(it, this::updateUserList)
             }
     }
+
 
     companion object {
         private const val SEARCH_LENGTH = 3

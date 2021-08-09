@@ -1,7 +1,5 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
-import android.view.View
-
 interface UserSearchInterface {
-    fun goToChat(user: String)
+    fun goToChat(user: String, job: String, photo: String)
 }

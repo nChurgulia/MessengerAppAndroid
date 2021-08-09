@@ -81,6 +81,7 @@ class ProfilePage : AppCompatActivity() {
 
     private fun setUpUpdate(){
         updateButton.setOnClickListener {
+            jobView.clearFocus()
             updateInfo()
         }
     }
@@ -92,8 +93,12 @@ class ProfilePage : AppCompatActivity() {
     }
 
     private fun updateInfo() {
-        ManageInfo.uploadPhoto(photoUri)
-        ManageInfo.uploadJob(jobView.text.toString())
+        if (jobView.text.toString() == "") {
+            showWarning(R.id.job_pr, getString(R.string.empty_job))
+        }else{
+            ManageInfo.uploadPhoto(photoUri)
+            ManageInfo.uploadJob(jobView.text.toString())
+        }
     }
 
     private fun setUpImageView(){

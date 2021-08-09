@@ -2,12 +2,15 @@ package ge.nchurguliaXmchkhaidze.messengerapp
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -35,6 +38,13 @@ class ChatPage : AppCompatActivity() {
 
     private fun setUpToolbar(){
 
+        val extras = intent.extras
+        if (extras != null) {
+            findViewById<TextView>(R.id.title).text = extras.get(getString(R.string.chat_user)).toString()
+            findViewById<TextView>(R.id.subtitle).text = extras.get(getString(R.string.chat_user_job)).toString()
+            Glide.with(this).load(extras.get(getString(R.string.chat_user_photo)).toString()).into(findViewById(R.id. profile_pic))
+        }
+
         findViewById<ImageButton>(R.id.back_button).setOnClickListener{
             goToPage(this, ChatSearchPage::class.java)
         }
@@ -49,7 +59,8 @@ class ChatPage : AppCompatActivity() {
                     title.setPadding(EXPANDED_PADDING)
                     title.textSize = EXPANDED_TITLE_SIZE
                     subtitle.textSize = EXPANDED_SUBTITLE_SIZE
-                } else -> {
+                }
+                else -> {
                     toolBarView.orientation = LinearLayout.HORIZONTAL
                     title.setPadding(COLLAPSED_PADDING)
                     title.textSize = COLLAPSED_TITLE_SIZE

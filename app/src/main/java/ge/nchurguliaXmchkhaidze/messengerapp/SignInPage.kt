@@ -6,8 +6,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class SignInPage : AppCompatActivity() {
-    private lateinit var  signUpButton : Button
-    private lateinit var  signInButton : Button
+    private lateinit var signUpButton : Button
+    private lateinit var signInButton : Button
     private lateinit var emailField: TextView
     private lateinit var passwordField : TextView
 
@@ -21,10 +21,6 @@ class SignInPage : AppCompatActivity() {
         setUpSignUpButton()
         hideSoftKeyboard(R.id.nickname_si)
         hideSoftKeyboard(R.id.pass_si)
-    }
-
-    override fun onBackPressed() {
-
     }
 
     private fun initViews(){
@@ -43,7 +39,7 @@ class SignInPage : AppCompatActivity() {
 
     private fun setUpSignInButton(){
         findViewById<Button>(R.id.sign_in_button).setOnClickListener {
-            accountAccess.logIn(emailField.text.toString() + getString(R.string.mail_suffix),passwordField.text.toString(), this::goToConversations ) }
+            AccountAccess.logIn(emailField.text.toString() + getString(R.string.mail_suffix), passwordField.text.toString(), this::goToConversations ) }
     }
 
 

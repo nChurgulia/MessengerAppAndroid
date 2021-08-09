@@ -5,8 +5,8 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import java.lang.Thread.sleep
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
@@ -22,7 +22,7 @@ class ManageInfo {
             if(imageUri == null) return
             val filename = UUID.randomUUID().toString()
             val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
-            ref.putFile(imageUri!!)
+            ref.putFile(imageUri)
                     .addOnSuccessListener {
                         Log.d("Storage", "Succesfully uploaded image ${it.metadata?.path}")
                         ref.downloadUrl.addOnSuccessListener {
@@ -73,7 +73,7 @@ class ManageInfo {
                 }
         }
 
-         fun uploadInfo(column: String, info: String){
+         private fun uploadInfo(column: String, info: String){
             val uid = FirebaseAuth.getInstance().uid ?: ""
             val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
@@ -83,6 +83,7 @@ class ManageInfo {
                     }
                     .addOnFailureListener{
                         Log.d("UserInfo", "Failed to add info")
+//                        showWarning(R.id.job_pr, it.toString())
                     }
         }
 

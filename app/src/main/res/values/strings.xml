@@ -18,4 +18,7 @@
     <string name="search">Search</string>
     <string name="mail_suffix">\@gmail.com</string>
     <string name="no_data">No data found</string>
+    <string name="chat_user">chatUser</string>
+    <string name="chat_user_job">chatUserJob</string>
+    <string name="chat_user_photo">chatUserPhoto</string>
 </resources>
