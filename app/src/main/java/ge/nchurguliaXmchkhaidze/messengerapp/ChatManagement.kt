@@ -19,6 +19,18 @@ class ChatManagement {
             refReceiver.push().setValue(message).addOnSuccessListener {
                 Log.d("Message", "Successfully uploaded to Receiver ")
             }
+
+            var refSenderLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.sender}/${message.receiver}")
+            var refReceiverLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.receiver}/${message.sender}")
+
+            var lastMessage = LastMessageInfo(message.sender,message.content,message.sendTime)
+
+            refSenderLastMsg.setValue(lastMessage).addOnSuccessListener {
+                Log.d("LastMessage", "Successfuly saved for sender")
+            }
+            refReceiverLastMsg.setValue(lastMessage).addOnSuccessListener {
+                Log.d("LastMessage", "Successfuly saved for receiver")
+            }
         }
 
         fun getConversation(userOne: String, userTwo: String, senderRef: DatabaseReference, processConv: (ArrayList<MessageInfo>) -> Boolean) {

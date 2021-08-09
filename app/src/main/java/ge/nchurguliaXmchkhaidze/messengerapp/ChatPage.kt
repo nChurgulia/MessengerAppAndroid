@@ -49,7 +49,7 @@ class ChatPage : AppCompatActivity() {
     private fun endLoadingChat(chat: ArrayList<MessageInfo>) : Boolean{
         list = chat
 
-        var sortedChat = list.sortedWith(compareBy({it.sendTime})) 
+        var sortedChat = list.sortedWith(compareBy({it.sendTime}))
         list = ArrayList(sortedChat)
         adapter.list = list
         adapter.notifyDataSetChanged()

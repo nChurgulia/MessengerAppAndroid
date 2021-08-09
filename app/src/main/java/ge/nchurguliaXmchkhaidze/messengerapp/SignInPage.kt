@@ -43,7 +43,7 @@ class SignInPage : AppCompatActivity() {
 
     private fun setUpSignInButton(){
         findViewById<Button>(R.id.sign_in_button).setOnClickListener {
-            accountAccess.logIn(emailField.text.toString() + getString(R.string.mail_suffix),passwordField.text.toString(), this::goToConversations ) }
+            AccountAccess.logIn(emailField.text.toString() + getString(R.string.mail_suffix),passwordField.text.toString(), this::goToConversations ) }
     }
 
 

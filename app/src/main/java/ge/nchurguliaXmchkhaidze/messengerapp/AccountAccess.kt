@@ -4,7 +4,7 @@ import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 
-class accountAccess {
+class AccountAccess {
     companion object {
         fun  signUp(email: String, password: String, job: String, actionAfterLogged: () -> Boolean)  {
 

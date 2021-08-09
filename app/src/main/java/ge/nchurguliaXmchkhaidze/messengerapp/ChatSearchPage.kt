@@ -1,13 +1,10 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -36,11 +33,11 @@ class ChatSearchPage : AppCompatActivity(), UserSearchInterface {
         findViewById<BottomNavigationView>(R.id.bottomNavigationView).menu.getItem(0).isChecked = true
     }
 
-    private fun getData(): MutableList<chatInfo> {
-        var currList = mutableListOf<chatInfo>()
+    private fun getData(): MutableList<ChatInfo> {
+        var currList = mutableListOf<ChatInfo>()
 
         for(i in 0..20){
-            var curr = chatInfo("Afton Sixarulidze" ,  "On my way home but i needed to stop by the book store to..." + i.toString() , i.toString() + " min", R.drawable.avatar_image_placeholder)
+            var curr = ChatInfo("Afton Sixarulidze" ,  "On my way home but i needed to stop by the book store to..." + i.toString() , i.toString() + " min", R.drawable.avatar_image_placeholder)
             currList.add(curr)
         }
         return  currList
