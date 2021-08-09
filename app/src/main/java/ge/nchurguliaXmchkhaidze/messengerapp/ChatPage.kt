@@ -33,10 +33,9 @@ class ChatPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_page)
-
+        setUpToolbar()
         initUsers()
         initReferences()
-        setUpToolbar()
         setUpRV()
         loadChat()
         addMsgSentListener()
@@ -60,12 +59,6 @@ class ChatPage : AppCompatActivity() {
 
     private fun initUsers(){
         sender = FirebaseAuth.getInstance().uid!!
-        if(sender == "3un5nLkYCdhhV6pGSkOWgaQTgmI3"){
-            receiver =  "INShS1zp54aqkBpIJtuxzLAZ0uU2"
-        }else{
-            receiver = "3un5nLkYCdhhV6pGSkOWgaQTgmI3"
-        }
-
     }
 
     private fun initReferences(){
@@ -114,6 +107,8 @@ class ChatPage : AppCompatActivity() {
         val extras = intent.extras
         if (extras != null) {
             findViewById<TextView>(R.id.title).text = extras.get(getString(R.string.chat_user)).toString()
+            receiver = extras.get("uid").toString()
+            Log.d("CHECKUID", receiver)
             findViewById<TextView>(R.id.subtitle).text = extras.get(getString(R.string.chat_user_job)).toString()
             Glide.with(this).load(extras.get(getString(R.string.chat_user_photo)).toString()).into(findViewById(R.id. profile_pic))
         }

@@ -22,7 +22,7 @@ class UserSearchAdapter(private val listListener: UserSearchInterface) : Recycle
         holder as UserInfoViewHolder
         holder.itemView.setOnClickListener {
             Log.d("job", list[position].photo)
-            listListener.goToChat(list[position].nickname, list[position].job, list[position].photo)
+            listListener.goToChat(list[position].nickname, list[position].uid, list[position].job, list[position].photo)
         }
         holder.bindUserInfo(list[position].nickname, list[position].job, list[position].photo)
     }

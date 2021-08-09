@@ -41,7 +41,7 @@ class ChatManagement {
                     .addOnSuccessListener {
                         var list = ArrayList<MessageInfo>()
                         var hmap: HashMap<Any,Any>
-                        var dataSnapshot: DataSnapshot
+
                         if(it.value != null){
                             hmap = it.value as HashMap<Any,Any>
 //                            hmap = it.value as HashMap<String, MessageInfo>
@@ -49,9 +49,19 @@ class ChatManagement {
                             for( (key,msg) in hmap){
                                 Log.d("ReadConv", msg.toString())
                                 var msgMap = msg as HashMap<String, Any>
-                                var msg = MessageInfo(msgMap.get("sender") as String,msgMap.get("receiver") as String,msgMap.get("content") as String, msgMap.get("sendTime") as String)
-                                Log.d("ReadConv", msg.content)
-                                list.add(msg)
+                                if(msgMap != null){
+                                    var sender = msgMap.get("sender") as String?
+                                    var receiver = msgMap.get("receiver") as String?
+                                    var content = msgMap.get("content") as String?
+                                    var sendTime =  msgMap.get("sendTime") as String?
+                                    if(sender != null && receiver != null && content != null && sendTime != null){
+                                        var msg = MessageInfo(sender, receiver, content, sendTime)
+                                        Log.d("ReadConv", msg.content)
+                                        list.add(msg)
+                                    }
+
+                                }
+
                             }
                             Log.d("ReadConv", "already read")
                             processConv(list)

@@ -43,15 +43,15 @@ class UserSearchPage : AppCompatActivity(), UserSearchInterface {
         if (uid == null) {
             showWarning(R.id.search_field, getString(R.string.no_data))
         }else {
-            adapter.list.add(UserInfo(nickname!!, job!!, photo!!))
+            adapter.list.add(UserInfo(nickname!!, job!!, photo!!, uid))
             adapter.notifyDataSetChanged()
         }
 
         return true
     }
 
-    override fun goToChat(user: String, job: String, photo: String) {
-        val extras = mapOf(Pair(getString(R.string.chat_user), user), Pair(getString(R.string.chat_user_job), job), Pair(getString(R.string.chat_user_photo), photo))
+    override fun goToChat(user: String, uid: String, job: String, photo: String) {
+        val extras = mapOf(Pair(getString(R.string.chat_user), user), Pair("uid", uid), Pair(getString(R.string.chat_user_job), job), Pair(getString(R.string.chat_user_photo), photo))
         goToPage(this, ChatPage::class.java, extras)
     }
 
