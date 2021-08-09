@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.util.CollectionUtils.listOf
+import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,7 +27,7 @@ class ConversationPageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val msgInfo = list[position]
-        val currentDate = SimpleDateFormat("HH:mm").format(msgInfo.sendTime)
+        val currentDate = SimpleDateFormat("HH:mm").format(Date(msgInfo.sendTime))
 
         if (getItemViewType(position) == SENT) {
             holder as SentMsgHolder
@@ -42,7 +43,8 @@ class ConversationPageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() 
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (list[position].sender == "me"){
+        var uid = FirebaseAuth.getInstance().uid
+        if (list[position].sender == uid){
             return SENT
         }
         return RECEIVED

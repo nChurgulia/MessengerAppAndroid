@@ -14,22 +14,95 @@ import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.FirebaseError
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ChatPage : AppCompatActivity() {
     private var list: ArrayList<MessageInfo> = ArrayList()
     private var adapter = ConversationPageAdapter()
+    private lateinit var refSender: DatabaseReference
+    private lateinit var refReceiver: DatabaseReference
+    private lateinit var sender : String
+    private lateinit var receiver: String
+    private lateinit var user: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_page)
 
+        initUsers()
+        initReferences()
         setUpToolbar()
         setUpRV()
+        loadChat()
         addMsgSentListener()
         hideSoftKeyboard(R.id.message_txt)
         scrollChat()
+    }
+
+    private fun loadChat(){
+        ChatManagement.getConversation(sender,receiver,refSender,this::endLoadingChat)
+    }
+
+    private fun endLoadingChat(chat: ArrayList<MessageInfo>) : Boolean{
+        list = chat
+
+        var sortedChat = list.sortedWith(compareBy({it.sendTime})) 
+        list = ArrayList(sortedChat)
+        adapter.list = list
+        adapter.notifyDataSetChanged()
+        return true
+    }
+
+    private fun initUsers(){
+        sender = FirebaseAuth.getInstance().uid!!
+        if(sender == "3un5nLkYCdhhV6pGSkOWgaQTgmI3"){
+            receiver =  "INShS1zp54aqkBpIJtuxzLAZ0uU2"
+        }else{
+            receiver = "3un5nLkYCdhhV6pGSkOWgaQTgmI3"
+        }
+
+    }
+
+    private fun initReferences(){
+        refSender = FirebaseDatabase.getInstance().getReference("/messages/$sender/$receiver")
+        refReceiver = FirebaseDatabase.getInstance().getReference("/messages/$receiver/$sender")
+        refSender.addChildEventListener( object: ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val chatMessage = snapshot.getValue(MessageInfo::class.java)
+                if(chatMessage != null){
+                    if(chatMessage.sender != sender){
+                        Log.d("DataChanged", "Data got")
+                        Log.d("DataChanged",chatMessage?.content!!)
+                        list.add(chatMessage)
+                        adapter.list = list
+                        adapter.notifyDataSetChanged()
+                    }
+
+                }else{
+                    Log.d("DataChanged", "Something Failed")
+                }
+
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            }
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+            }
+        }
+
+        )
     }
 
     override fun onBackPressed() {
@@ -68,6 +141,7 @@ class ChatPage : AppCompatActivity() {
                 }
             }
         })
+
     }
 
     private fun setUpRV(){
@@ -85,8 +159,10 @@ class ChatPage : AppCompatActivity() {
         findViewById<TextInputLayout>(R.id.msg_field).setEndIconOnClickListener {
             val txt = findViewById<TextInputEditText>(R.id.message_txt).text.toString().trim()
             if(txt != "") {
-                list.add(MessageInfo("me", "someone", txt, Date()))
-                list.add(MessageInfo("bla", "me", "vhkb???", Date()))
+                var msg = MessageInfo(sender, receiver, txt, Date().toString())
+                list.add(msg)
+                ChatManagement.sendMessage(msg,refSender,refReceiver)
+               // list.add(MessageInfo("bla", "me", "vhkb???", Date()))
                 adapter.list = list
                 adapter.notifyDataSetChanged()
                 findViewById<TextInputEditText>(R.id.message_txt).text = null
