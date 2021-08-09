@@ -36,7 +36,9 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ChatPage" />
         <activity android:name=".SignUpPage" />
-        <activity android:name=".UserSearchPage"/>
+        <activity
+            android:name=".UserSearchPage"
+            android:windowSoftInputMode="adjustNothing"/>
     </application>
 
 </manifest>

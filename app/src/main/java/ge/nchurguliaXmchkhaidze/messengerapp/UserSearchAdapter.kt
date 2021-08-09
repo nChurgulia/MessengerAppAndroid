@@ -1,5 +1,6 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import java.security.AccessController.getContext
 
 class UserSearchAdapter(private val listListener: UserSearchInterface) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var list = mutableListOf<UserInfo>()
@@ -18,9 +21,10 @@ class UserSearchAdapter(private val listListener: UserSearchInterface) : Recycle
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder as UserInfoViewHolder
         holder.itemView.setOnClickListener {
-            listListener.goToChat((holder.itemView.findViewById(R.id.nickname) as TextView).text.toString())
+            Log.d("job", list[position].photo)
+            listListener.goToChat(list[position].nickname, list[position].job, list[position].photo)
         }
-        holder.bindUserInfo(list[position].nickname, list[position].job)
+        holder.bindUserInfo(list[position].nickname, list[position].job, list[position].photo)
     }
 
     override fun getItemCount(): Int {
@@ -28,9 +32,10 @@ class UserSearchAdapter(private val listListener: UserSearchInterface) : Recycle
     }
 
     inner class UserInfoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bindUserInfo(nickname: String, job: String) {
+        fun bindUserInfo(nickname: String, job: String, photoUri: String) {
             userName.text = nickname
             userPosition.text = job
+            Glide.with(this.itemView.context).load(photoUri).into(photo)
         }
 
         private val userName = view.findViewById<TextView>(R.id.nickname)
