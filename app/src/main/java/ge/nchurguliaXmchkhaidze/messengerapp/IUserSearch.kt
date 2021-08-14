@@ -1,5 +1,5 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
-interface UserSearchInterface {
+interface IUserSearch {
     fun goToChat(user: String, uid: String,  job: String, photo: String)
 }

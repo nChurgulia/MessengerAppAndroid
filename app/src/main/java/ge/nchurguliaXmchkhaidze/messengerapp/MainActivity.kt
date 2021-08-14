@@ -9,6 +9,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
@@ -17,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         if(FirebaseAuth.getInstance().currentUser == null){
             goToPage(this, SignInPage::class.java)
         }else{
@@ -37,9 +41,8 @@ fun Activity.hideSoftKeyboard(id: Int){
     }
 }
 
-fun Activity.showWarning(id: Int, txt: String){
-    val contextView = findViewById<View>(id)
-    Snackbar.make(contextView, txt, Snackbar.LENGTH_SHORT).show()
+fun showWarning(txt: String, view: View, fab: FloatingActionButton? = null){
+    Snackbar.make(view, txt, Snackbar.LENGTH_SHORT).setAnchorView(fab).show()
 }
 
 fun goToPage(context: Context, pageClass: Class<*>, extras: Map<String, String>? = null) {

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +13,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.util.*
@@ -28,7 +26,6 @@ class ChatPage : AppCompatActivity() {
     private lateinit var refReceiver: DatabaseReference
     private lateinit var sender : String
     private lateinit var receiver: String
-    private lateinit var user: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,20 +37,22 @@ class ChatPage : AppCompatActivity() {
         loadChat()
         addMsgSentListener()
         hideSoftKeyboard(R.id.message_txt)
-        scrollChat()
     }
 
     private fun loadChat(){
+        startLoader()
         ChatManagement.getConversation(sender,receiver,refSender,this::endLoadingChat)
     }
 
     private fun endLoadingChat(chat: ArrayList<MessageInfo>) : Boolean{
+        stopLoader()
         list = chat
 
-        var sortedChat = list.sortedWith(compareBy({it.sendTime}))
+        val sortedChat = list.sortedWith(compareBy { Date(it.sendTime) })
         list = ArrayList(sortedChat)
         adapter.list = list
         adapter.notifyDataSetChanged()
+        scrollChat()
         return true
     }
 
@@ -70,10 +69,11 @@ class ChatPage : AppCompatActivity() {
                 if(chatMessage != null){
                     if(chatMessage.sender != sender){
                         Log.d("DataChanged", "Data got")
-                        Log.d("DataChanged",chatMessage?.content!!)
+                        Log.d("DataChanged", chatMessage.content)
                         list.add(chatMessage)
                         adapter.list = list
                         adapter.notifyDataSetChanged()
+                        scrollChat()
                     }
 
                 }else{
@@ -104,12 +104,14 @@ class ChatPage : AppCompatActivity() {
 
     private fun setUpToolbar(){
 
+        val titleId = R.id.title
+        val subTitleId = R.id.subtitle
         val extras = intent.extras
         if (extras != null) {
-            findViewById<TextView>(R.id.title).text = extras.get(getString(R.string.chat_user)).toString()
+            findViewById<TextView>(titleId).text = extras.get(getString(R.string.chat_user)).toString()
             receiver = extras.get("uid").toString()
             Log.d("CHECKUID", receiver)
-            findViewById<TextView>(R.id.subtitle).text = extras.get(getString(R.string.chat_user_job)).toString()
+            findViewById<TextView>(subTitleId).text = extras.get(getString(R.string.chat_user_job)).toString()
             Glide.with(this).load(extras.get(getString(R.string.chat_user_photo)).toString()).into(findViewById(R.id. profile_pic))
         }
 
@@ -117,10 +119,10 @@ class ChatPage : AppCompatActivity() {
             goToPage(this, ChatSearchPage::class.java)
         }
 
-        findViewById<AppBarLayout>(R.id.Search_Collapsing_Bar).addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+        findViewById<AppBarLayout>(R.id.Search_Collapsing_Bar).addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             val toolBarView = findViewById<LinearLayout>(R.id.tool_bar_view)
-            val title = findViewById<TextView>(R.id.title)
-            val subtitle = findViewById<TextView>(R.id.subtitle)
+            val title = findViewById<TextView>(titleId)
+            val subtitle = findViewById<TextView>(subTitleId)
             when {
                 (verticalOffset == 0) -> {
                     toolBarView.orientation = LinearLayout.VERTICAL
@@ -151,16 +153,16 @@ class ChatPage : AppCompatActivity() {
     }
 
     private fun addMsgSentListener(){
+        val msgId = R.id.message_txt
         findViewById<TextInputLayout>(R.id.msg_field).setEndIconOnClickListener {
-            val txt = findViewById<TextInputEditText>(R.id.message_txt).text.toString().trim()
+            val txt = findViewById<TextInputEditText>(msgId).text.toString().trim()
             if(txt != "") {
-                var msg = MessageInfo(sender, receiver, txt, Date().toString())
+                val msg = MessageInfo(sender, receiver, txt, Date().toString())
                 list.add(msg)
                 ChatManagement.sendMessage(msg,refSender,refReceiver)
-               // list.add(MessageInfo("bla", "me", "vhkb???", Date()))
                 adapter.list = list
                 adapter.notifyDataSetChanged()
-                findViewById<TextInputEditText>(R.id.message_txt).text = null
+                findViewById<TextInputEditText>(msgId).text = null
                 scrollChat()
             }
         }

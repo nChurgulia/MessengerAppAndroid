@@ -1,7 +1,6 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import ge.nchurguliaXmchkhaidze.messengerapp.ChatSearchPage.Companion.formatTime
+import java.util.*
+import kotlin.collections.ArrayList
 
-class SearchPageAdapter (private val context : Context,  private val listListener: UserSearchInterface) : RecyclerView.Adapter<SearchPageAdapter.SearchPageVH>() {
+class SearchPageAdapter (private val context : Context,  private val listListener: IUserSearch) : RecyclerView.Adapter<SearchPageAdapter.SearchPageVH>() {
 
     lateinit var items: ArrayList<ChatInfo>
 
@@ -29,7 +31,7 @@ class SearchPageAdapter (private val context : Context,  private val listListene
             // Last Message
             lastMessage.text = lastMsg
             // Time Ago
-            timeAgo.text = time
+            timeAgo.text = formatTime(Date(time))
             // Icon
             Glide.with(this.itemView.context).load(profilePicture).into(image)
         }

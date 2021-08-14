@@ -5,9 +5,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
-import java.lang.Thread.sleep
 import java.util.*
-import kotlin.collections.HashMap
 
 
 class ManageInfo {
@@ -85,38 +83,6 @@ class ManageInfo {
                         Log.d("UserInfo", "Failed to add info")
 //                        showWarning(R.id.job_pr, it.toString())
                     }
-        }
-
-
-
-        fun filterUsers(keyword: String, updateData: (uid: String?, nickname: String?, job: String?, photo: String?) -> Boolean) {
-            FirebaseDatabase.getInstance().reference
-                .child(USERS)
-                .orderByChild(NICKNAME)
-                .startAt(keyword)
-                .endAt(keyword + "\uf8ff")
-                .addValueEventListener(object : ValueEventListener {
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-
-                        val messages = snapshot.getValue(object: GenericTypeIndicator<HashMap<String, HashMap<String, String>>>(){})
-                        if (messages != null) {
-                            for (i in messages) {
-                                val uid = i.key
-                                val nickname = i.value[NICKNAME]
-                                val job = i.value[JOB]
-                                val photo = i.value[PHOTO]
-                                updateData(uid, nickname, job, photo)
-                            }
-                        }else{
-                            updateData(null, null, null, null)
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-                })
         }
 
         //-------------------------------------------

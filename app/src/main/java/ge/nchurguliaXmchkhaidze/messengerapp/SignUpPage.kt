@@ -2,12 +2,8 @@ package ge.nchurguliaXmchkhaidze.messengerapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
-import java.lang.Thread.sleep
 
 class SignUpPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +23,9 @@ class SignUpPage : AppCompatActivity() {
             val job = findViewById<EditText>(R.id.job_su).text.toString()
 
             when {
-                nick == "" -> showWarning(R.id.sign_up, getString(R.string.empty_nick))
-                pass == "" -> showWarning(R.id.sign_up, getString(R.string.empty_pass))
-                job == ""-> showWarning(R.id.sign_up, getString(R.string.empty_job))
+                nick == "" -> showWarning(getString(R.string.empty_nick), findViewById(R.id.sign_up))
+                pass == "" -> showWarning(getString(R.string.empty_pass), findViewById(R.id.sign_up, ))
+                job == ""-> showWarning(getString(R.string.empty_job), findViewById(R.id.sign_up, ))
                 else -> AccountAccess.signUp(nick + getString(R.string.mail_suffix), pass, job, this::goToConversations)
             }
         }

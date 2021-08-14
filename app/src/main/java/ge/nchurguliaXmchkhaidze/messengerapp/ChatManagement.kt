@@ -1,8 +1,6 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.util.*
@@ -20,10 +18,10 @@ class ChatManagement {
                 Log.d("Message", "Successfully uploaded to Receiver ")
             }
 
-            var refSenderLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.sender}/${message.receiver}")
-            var refReceiverLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.receiver}/${message.sender}")
+            val refSenderLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.sender}/${message.receiver}")
+            val refReceiverLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.receiver}/${message.sender}")
 
-            var lastMessage = LastMessageInfo(message.sender,message.content,message.sendTime)
+            val lastMessage = LastMessageInfo(message.sender,message.content,message.sendTime)
 
             refSenderLastMsg.setValue(lastMessage).addOnSuccessListener {
                 Log.d("LastMessage", "Successfuly saved for sender")

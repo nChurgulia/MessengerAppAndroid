@@ -60,21 +60,25 @@ class ProfilePage : AppCompatActivity() {
 
     private fun displayInfo(){
 
+        startLoader()
         ManageInfo.getNick(this::displayNick)
         ManageInfo.getJob(this::displayJob)
         ManageInfo.getPhoto(this::displayPhoto)
     }
 
     private fun displayPhoto(url:String): Boolean{
-
+        stopLoader()
         Glide.with(this).load(url).into(photoView)
         return true
     }
+
     private fun displayJob(job:String): Boolean{
+        stopLoader()
         jobView.text = job
         return true
     }
     private fun displayNick(nick:String): Boolean{
+        stopLoader()
         nickView.text = nick
         return true
     }
@@ -94,7 +98,7 @@ class ProfilePage : AppCompatActivity() {
 
     private fun updateInfo() {
         if (jobView.text.toString() == "") {
-            showWarning(R.id.job_pr, getString(R.string.empty_job))
+            showWarning(getString(R.string.empty_job), jobView, findViewById(R.id.add_btn))
         }else{
             ManageInfo.uploadPhoto(photoUri)
             ManageInfo.uploadJob(jobView.text.toString())

@@ -23,7 +23,7 @@
     <dimen name="bubble_margin">24dp</dimen>
     <dimen name="msg_field_padding">20dp</dimen>
     <dimen name="chat_margin">8dp</dimen>
-    <dimen name="fab_margin">10dp</dimen>
+    <dimen name="fab_margin">5dp</dimen>
     <dimen name="bubble_corner_radius">40dp</dimen>
     <dimen name="bubble_padding_horizontal">40dp</dimen>
     <dimen name="padding_bubble_vertical">20dp</dimen>
