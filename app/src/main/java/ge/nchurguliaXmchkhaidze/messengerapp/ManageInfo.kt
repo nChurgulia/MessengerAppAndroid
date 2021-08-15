@@ -5,7 +5,6 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
-import java.lang.Thread.sleep
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -18,8 +17,12 @@ class ManageInfo {
         const val PHOTO = "photo"
         const val UID = "uid"
 
-        fun uploadPhoto(imageUri: Uri?){
-            if(imageUri == null) return
+        fun uploadUserInformation(nick: String, job: String, imageUri: Uri?, imageURL: String, actionAfterLogged: (() -> Boolean)?){
+            if(imageUri == null) {
+                uploadInfo(nick, job, imageURL, actionAfterLogged)
+                return
+            }
+            Log.d("NULLCHECK", imageUri.toString())
             val filename = UUID.randomUUID().toString()
             val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
             ref.putFile(imageUri)
@@ -27,65 +30,44 @@ class ManageInfo {
                         Log.d("Storage", "Succesfully uploaded image ${it.metadata?.path}")
                         ref.downloadUrl.addOnSuccessListener {
                             Log.d("Storage", "Photo URL is: $it")
-                            uploadInfo("photo", it.toString())
+                            uploadInfo(nick, job, it.toString(), actionAfterLogged)
                         }
                     }
         }
 
-        fun uploadJob(profession: String){
-            uploadInfo("job", profession)
-        }
-        fun uploadNick(nickname: String){
-            uploadInfo("nick", nickname)
-        }
 
 
-
-        fun getNick(processInfo: (String) -> Boolean)  {
-
-            getInfo("nick", processInfo)
-        }
-        fun getJob(processInfo: (String) -> Boolean)  {
-            getInfo("job", processInfo)
-        }
-        fun getPhoto(processInfo: (String) -> Boolean) {
-            getInfo("photo", processInfo)
-        }
-
-        private fun getInfo(column: String, processInfo: (String) -> Boolean){
+        fun getInfo(processInfo: (String, String, String) -> Boolean){
             val uid = FirebaseAuth.getInstance().uid ?: ""
-            val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+            var ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+            ref.get().addOnSuccessListener {
+                var hMap = it.value as HashMap<Any,Any>
+                var nickname = hMap.get("nick")!! as String
+                var job = hMap.get("job")!! as String
+                var photo = hMap.get("photo")!! as String
+                processInfo(nickname, job, photo)
+            }
+        }
 
-            ref.child(column).get()
+         private fun uploadInfo(nick: String, job: String, photoUrl: String, actionAfterLogged: (() -> Boolean)?){
+             val uid = FirebaseAuth.getInstance().uid ?: ""
+             val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+             var userDetails = HashMap<String, String> ()
+             userDetails["nick"] = nick
+             userDetails["job"] = job
+             userDetails["photo"] = photoUrl
+             ref.setValue(userDetails)
                 .addOnSuccessListener {
-                    var value = ""
-                    if(it.value != null){
-
-                        value = it.value as String
-                    }else{
-                        Log.d("ReadInfo", "null $column")
+                    Log.d("UserInfo", "info added: $job")
+                    if (actionAfterLogged != null) {
+                        actionAfterLogged()
                     }
-                    Log.d("ReadInfo", "info read: $value")
-                    processInfo(value)
                 }
                 .addOnFailureListener{
-                    Log.d("ReadInfo", "Failed to read info")
+                    Log.d("UserInfo", "Failed to add info")
+//              showWarning(R.id.job_pr, it.toString())
                 }
-        }
-
-         private fun uploadInfo(column: String, info: String){
-            val uid = FirebaseAuth.getInstance().uid ?: ""
-            val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
-
-            ref.child(column).setValue(info)
-                    .addOnSuccessListener {
-                        Log.d("UserInfo", "info added: $info")
-                    }
-                    .addOnFailureListener{
-                        Log.d("UserInfo", "Failed to add info")
-//                        showWarning(R.id.job_pr, it.toString())
-                    }
-        }
+         }
 
 
 
@@ -117,6 +99,9 @@ class ManageInfo {
                         TODO("Not yet implemented")
                     }
                 })
+
+
+
         }
 
         //-------------------------------------------

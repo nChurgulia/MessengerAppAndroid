@@ -2,25 +2,29 @@ package ge.nchurguliaXmchkhaidze.messengerapp
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import java.net.URL
 
 class ProfilePage : AppCompatActivity() {
     private var photoUri : Uri? = null
+    private var photoURL : String? = null
 
     private lateinit var nickView: TextView
     private lateinit var jobView: TextView
     private lateinit var photoView: ImageView
     private lateinit var updateButton: Button
     private lateinit var signoutButton: Button
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,25 +63,21 @@ class ProfilePage : AppCompatActivity() {
     }
 
     private fun displayInfo(){
+        ManageInfo.getInfo(this::endDisplayInfo)
 
-        ManageInfo.getNick(this::displayNick)
-        ManageInfo.getJob(this::displayJob)
-        ManageInfo.getPhoto(this::displayPhoto)
     }
-
-    private fun displayPhoto(url:String): Boolean{
-
+    private  fun endDisplayInfo(nick: String, job: String, url: String) : Boolean{
+        // photo
+        photoURL = url
         Glide.with(this).load(url).into(photoView)
-        return true
-    }
-    private fun displayJob(job:String): Boolean{
+        // job
         jobView.text = job
-        return true
-    }
-    private fun displayNick(nick:String): Boolean{
+        // nick
         nickView.text = nick
         return true
     }
+
+
 
     private fun setUpUpdate(){
         updateButton.setOnClickListener {
@@ -96,8 +96,8 @@ class ProfilePage : AppCompatActivity() {
         if (jobView.text.toString() == "") {
             showWarning(R.id.job_pr, getString(R.string.empty_job))
         }else{
-            ManageInfo.uploadPhoto(photoUri)
-            ManageInfo.uploadJob(jobView.text.toString())
+            Log.d("KETDEBA RAME??", "movedi")
+            ManageInfo.uploadUserInformation(nickView.text.toString(), jobView.text.toString(), photoUri, photoURL!!, null)
         }
     }
 

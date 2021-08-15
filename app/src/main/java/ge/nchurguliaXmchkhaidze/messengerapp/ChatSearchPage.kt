@@ -37,7 +37,6 @@ class ChatSearchPage : AppCompatActivity(), UserSearchInterface {
         }
         setUpNavBar()
         LastMessageManagement.getLastMessageInfo(this::processData)
-
     }
 
 
@@ -55,7 +54,6 @@ class ChatSearchPage : AppCompatActivity(), UserSearchInterface {
             val date = formatTime(Date(sendTime))
             LastMessageManagement.loadUserData(fromId, content, date, this::loadOneUser)
         }
-
         return true
     }
 
