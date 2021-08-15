@@ -1,9 +1,11 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.presenter
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import ge.nchurguliaXmchkhaidze.messengerapp.R
+import ge.nchurguliaXmchkhaidze.messengerapp.model.AccountAccess
 
 class SignUpPage : AppCompatActivity(), IErrorHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +39,7 @@ class SignUpPage : AppCompatActivity(), IErrorHandler {
     }
 
     override fun handleError(err: String): Boolean {
-        val newErr = err.replace("email address", "username", true)
+        val newErr = err.replace(getString(R.string.email_addr), getString(R.string.username), true)
         showWarning(newErr, findViewById<Button>(R.id.sign_up))
         return true
     }

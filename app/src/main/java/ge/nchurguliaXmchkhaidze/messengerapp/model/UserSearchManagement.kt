@@ -1,6 +1,10 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.model
 
 import com.google.firebase.database.*
+import ge.nchurguliaXmchkhaidze.messengerapp.data.UserInfo.Companion.JOB
+import ge.nchurguliaXmchkhaidze.messengerapp.data.UserInfo.Companion.NICK
+import ge.nchurguliaXmchkhaidze.messengerapp.data.UserInfo.Companion.PHOTO
+import ge.nchurguliaXmchkhaidze.messengerapp.data.UserInfo.Companion.USERS
 
 class UserSearchManagement {
 
@@ -14,20 +18,20 @@ class UserSearchManagement {
         if (keyword == "") {
             query = if (lastNode == "") {
                 FirebaseDatabase.getInstance().reference
-                        .child(ManageInfo.USERS)
-                        .orderByChild(ManageInfo.NICKNAME)
+                        .child(USERS)
+                        .orderByChild(NICK)
                         .limitToFirst(limit)
             } else {
                 FirebaseDatabase.getInstance().reference
-                        .child(ManageInfo.USERS)
-                        .orderByChild(ManageInfo.NICKNAME)
+                        .child(USERS)
+                        .orderByChild(NICK)
                         .startAfter(lastNode)
                         .limitToFirst(limit)
             }
         } else {
             query = FirebaseDatabase.getInstance().reference
-                    .child(ManageInfo.USERS)
-                    .orderByChild(ManageInfo.NICKNAME)
+                    .child(USERS)
+                    .orderByChild(NICK)
                     .startAt(keyword)
                     .endAt(keyword + "\uf8ff")
         }
@@ -42,9 +46,9 @@ class UserSearchManagement {
                 for (i in snapshot.children) {
                     val uid = i.key
                     val hMap = i.value as HashMap<String, String>
-                    val nickname = hMap[ManageInfo.NICKNAME]
-                    val job = hMap[ManageInfo.JOB]
-                    val photo = hMap[ManageInfo.PHOTO]
+                    val nickname = hMap[NICK]
+                    val job = hMap[JOB]
+                    val photo = hMap[PHOTO]
                     if (keyword == "") lastNode = nickname
                     updateData(uid, nickname, job, photo)
                 }

@@ -18,26 +18,26 @@
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/search_view_background" /> -->
         <activity
-            android:name=".ChatSearchPage"
+            android:name=".presenter.ChatSearchPage"
             android:windowSoftInputMode="adjustPan">
         </activity>
 
-        <activity android:name=".MainActivity" >
+        <activity android:name=".presenter.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignInPage">
+        <activity android:name=".presenter.SignInPage">
         </activity>
         <activity
-            android:name=".ProfilePage"
+            android:name=".presenter.ProfilePage"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ChatPage" />
-        <activity android:name=".SignUpPage" />
+        <activity android:name=".presenter.ChatPage" />
+        <activity android:name=".presenter.SignUpPage" />
         <activity
-            android:name=".UserSearchPage"
+            android:name=".presenter.UserSearchPage"
             android:windowSoftInputMode="adjustNothing"/>
     </application>
 

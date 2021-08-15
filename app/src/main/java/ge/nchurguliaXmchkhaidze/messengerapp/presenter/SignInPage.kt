@@ -1,10 +1,12 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.presenter
 
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import ge.nchurguliaXmchkhaidze.messengerapp.R
+import ge.nchurguliaXmchkhaidze.messengerapp.model.AccountAccess
 
 class SignInPage : AppCompatActivity(), IErrorHandler {
     private lateinit var signUpButton : Button
@@ -59,7 +61,7 @@ class SignInPage : AppCompatActivity(), IErrorHandler {
     }
 
     override fun handleError(err: String): Boolean{
-        val newErr = err.replace("email address", "username", true)
+        val newErr = err.replace(getString(R.string.email_addr), getString(R.string.username), true)
         showWarning(newErr, signInButton)
         return true
     }

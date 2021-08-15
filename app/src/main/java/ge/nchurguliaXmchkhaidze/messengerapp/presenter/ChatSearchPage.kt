@@ -1,4 +1,4 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.presenter
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,6 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding2.widget.RxTextView
+import ge.nchurguliaXmchkhaidze.messengerapp.*
+import ge.nchurguliaXmchkhaidze.messengerapp.data.ChatInfo
+import ge.nchurguliaXmchkhaidze.messengerapp.data.LastMessageInfo
+import ge.nchurguliaXmchkhaidze.messengerapp.model.LastMessageManagement
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,23 +23,11 @@ class ChatSearchPage : AppCompatActivity(), IUserSearch, IErrorHandler {
     private lateinit var currList: ArrayList<ChatInfo>
     private lateinit var secondPageA: SearchPageAdapter
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_search_page)
 
-        currList = ArrayList()
-        secondPageA = SearchPageAdapter(this,  this)
-        secondPageA.items = currList
-        val chatPageRV = findViewById<RecyclerView>(R.id.SearchPageRV)
-        chatPageRV.adapter = secondPageA
-        chatPageRV.layoutManager = LinearLayoutManager(this)
-        chatPageRV.setOnTouchListener { v, event ->
-            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).
-            hideSoftInputFromWindow(findViewById<EditText>(R.id.search_field).windowToken, 0)
-            v?.onTouchEvent(event) ?: true
-        }
-
+        setUpRV()
         setUpSearch()
         setUpNavBar()
         hideSoftKeyboard(R.id.search_field)
@@ -73,6 +65,21 @@ class ChatSearchPage : AppCompatActivity(), IUserSearch, IErrorHandler {
         return true
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setUpRV(){
+        currList = ArrayList()
+        secondPageA = SearchPageAdapter(this,  this)
+        secondPageA.items = currList
+        val chatPageRV = findViewById<RecyclerView>(R.id.SearchPageRV)
+        chatPageRV.adapter = secondPageA
+        chatPageRV.layoutManager = LinearLayoutManager(this)
+        chatPageRV.setOnTouchListener { v, event ->
+            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).
+            hideSoftInputFromWindow(findViewById<EditText>(R.id.search_field).windowToken, 0)
+            v?.onTouchEvent(event) ?: true
+        }
+    }
+
     private fun setUpNavBar(){
         findViewById<BottomNavigationView>(R.id.bottomNavigationView).setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -93,7 +100,7 @@ class ChatSearchPage : AppCompatActivity(), IUserSearch, IErrorHandler {
     }
 
     override fun goToChat(user: String, uid:String, job: String, photo: String) {
-        val extras = mapOf(Pair(getString(R.string.chat_user), user), Pair("uid", uid), Pair(getString(R.string.chat_user_job), job), Pair(getString(R.string.chat_user_photo), photo))
+        val extras = mapOf(Pair(getString(R.string.chat_user), user), Pair(getString(R.string.chatUserUid), uid), Pair(getString(R.string.chat_user_job), job), Pair(getString(R.string.chat_user_photo), photo))
         goToPage(this, ChatPage::class.java, extras)
     }
 
@@ -123,6 +130,11 @@ class ChatSearchPage : AppCompatActivity(), IUserSearch, IErrorHandler {
         secondPageA.notifyDataSetChanged()
     }
 
+    override fun handleError(err: String): Boolean {
+        showWarning(err, findViewById(R.id.search_field))
+        return true
+    }
+
     companion object {
         fun formatTime(date: Date): String {
 
@@ -144,10 +156,5 @@ class ChatSearchPage : AppCompatActivity(), IUserSearch, IErrorHandler {
                 }
             }
         }
-    }
-
-    override fun handleError(err: String): Boolean {
-        showWarning(err, findViewById(R.id.search_field))
-        return true
     }
 }

@@ -1,10 +1,9 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.presenter
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,7 +12,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import java.net.URL
+import ge.nchurguliaXmchkhaidze.messengerapp.*
+import ge.nchurguliaXmchkhaidze.messengerapp.model.ManageInfo
 
 class ProfilePage : AppCompatActivity(), IErrorHandler {
     private var photoUri : Uri? = null

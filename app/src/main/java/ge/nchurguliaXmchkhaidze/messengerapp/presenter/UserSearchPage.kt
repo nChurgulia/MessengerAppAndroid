@@ -1,4 +1,4 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.presenter
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.widget.RxTextView
+import ge.nchurguliaXmchkhaidze.messengerapp.R
+import ge.nchurguliaXmchkhaidze.messengerapp.data.UserInfo
+import ge.nchurguliaXmchkhaidze.messengerapp.model.UserSearchManagement
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
 
@@ -44,7 +47,7 @@ class UserSearchPage : AppCompatActivity(), IUserSearch, IErrorHandler {
     }
 
     override fun goToChat(user: String, uid: String, job: String, photo: String) {
-        val extras = mapOf(Pair(getString(R.string.chat_user), user), Pair("uid", uid), Pair(getString(R.string.chat_user_job), job), Pair(getString(R.string.chat_user_photo), photo))
+        val extras = mapOf(Pair(getString(R.string.chat_user), user),  Pair(getString(R.string.chatUserUid), uid), Pair(getString(R.string.chat_user_job), job), Pair(getString(R.string.chat_user_photo), photo))
         goToPage(this, ChatPage::class.java, extras)
     }
 
@@ -54,9 +57,6 @@ class UserSearchPage : AppCompatActivity(), IUserSearch, IErrorHandler {
 
         RxTextView.textChanges(searchView)
             .debounce(SEARCH_TIMEOUT, TimeUnit.MILLISECONDS)
-//            .filter { charSequence ->
-//                charSequence.trim().length >= SEARCH_LENGTH
-//            }
             .map { charSequence ->
                 charSequence.toString().trim()
             }

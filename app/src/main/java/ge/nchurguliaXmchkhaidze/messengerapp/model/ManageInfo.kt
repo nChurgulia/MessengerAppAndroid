@@ -1,19 +1,20 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.model
 
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import ge.nchurguliaXmchkhaidze.messengerapp.data.UserInfo.Companion.JOB
+import ge.nchurguliaXmchkhaidze.messengerapp.data.UserInfo.Companion.NICK
+import ge.nchurguliaXmchkhaidze.messengerapp.data.UserInfo.Companion.PHOTO
+import ge.nchurguliaXmchkhaidze.messengerapp.data.UserInfo.Companion.USERS
 import java.util.*
 
 
 class ManageInfo {
     companion object {
-        const val USERS = "users"
-        const val NICKNAME = "nick"
-        const val JOB = "job"
-        const val PHOTO = "photo"
+        const val IMAGES = "images"
 
         fun uploadUserInformation(nick: String, job: String, imageUri: Uri?, imageURL: String, actionAfterLogged: (() -> Boolean)? , handleError: (String) -> Boolean ){
             if(imageUri == null) {
@@ -23,7 +24,7 @@ class ManageInfo {
             Log.d("NULLCHECK", imageUri.toString())
 
             val filename = UUID.randomUUID().toString()
-            val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
+            val ref = FirebaseStorage.getInstance().getReference("/$IMAGES/$filename")
             ref.putFile(imageUri)
                     .addOnSuccessListener {
                         Log.d("Storage", "Succesfully uploaded image ${it.metadata?.path}")
@@ -39,12 +40,13 @@ class ManageInfo {
 
         fun getInfo(processInfo: (String, String, String) -> Boolean, handleError: (String) -> Boolean){
             val uid = FirebaseAuth.getInstance().uid ?: ""
-            val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+            val ref = FirebaseDatabase.getInstance().getReference("/$USERS/$uid")
             ref.get().addOnSuccessListener {
+                Log.d("prof", "$uid $it")
                 val hMap = it.value as HashMap<Any,Any>
-                val nickname = hMap["nick"]!! as String
-                val job = hMap["job"]!! as String
-                val photo = hMap["photo"]!! as String
+                val nickname = hMap[NICK]!! as String
+                val job = hMap[JOB]!! as String
+                val photo = hMap[PHOTO]!! as String
                 processInfo(nickname, job, photo)
             }
             .addOnFailureListener{
@@ -54,11 +56,11 @@ class ManageInfo {
 
         private fun uploadInfo(nick: String, job: String, photoUrl: String, actionAfterLogged: (() -> Boolean)?, handleError: (String) -> Boolean){
              val uid = FirebaseAuth.getInstance().uid ?: ""
-             val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+             val ref = FirebaseDatabase.getInstance().getReference("/$USERS/$uid")
              val userDetails = HashMap<String, String> ()
-             userDetails["nick"] = nick
-             userDetails["job"] = job
-             userDetails["photo"] = photoUrl
+             userDetails[NICK] = nick
+             userDetails[JOB] = job
+             userDetails[PHOTO] = photoUrl
              ref.setValue(userDetails)
                 .addOnSuccessListener {
                     Log.d("UserInfo", "info added: $job")

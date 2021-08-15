@@ -1,4 +1,4 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.presenter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import ge.nchurguliaXmchkhaidze.messengerapp.ChatSearchPage.Companion.formatTime
+import ge.nchurguliaXmchkhaidze.messengerapp.R
+import ge.nchurguliaXmchkhaidze.messengerapp.presenter.ChatSearchPage.Companion.formatTime
+import ge.nchurguliaXmchkhaidze.messengerapp.data.ChatInfo
 import java.util.*
 import kotlin.collections.ArrayList
 

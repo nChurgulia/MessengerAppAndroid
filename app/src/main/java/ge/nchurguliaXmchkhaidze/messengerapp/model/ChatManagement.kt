@@ -1,29 +1,37 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.model
 
 import android.util.Log
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import ge.nchurguliaXmchkhaidze.messengerapp.data.LastMessageInfo
+import ge.nchurguliaXmchkhaidze.messengerapp.data.LastMessageInfo.Companion.CONTENT
+import ge.nchurguliaXmchkhaidze.messengerapp.data.LastMessageInfo.Companion.LAST_MESSAGE
+import ge.nchurguliaXmchkhaidze.messengerapp.data.LastMessageInfo.Companion.RECEIVER
+import ge.nchurguliaXmchkhaidze.messengerapp.data.LastMessageInfo.Companion.SENDER
+import ge.nchurguliaXmchkhaidze.messengerapp.data.LastMessageInfo.Companion.SEND_TIME
+import ge.nchurguliaXmchkhaidze.messengerapp.data.MessageInfo
 import java.util.*
 import kotlin.collections.HashMap
 
 class ChatManagement {
     companion object{
 
-        fun sendMessage(message: MessageInfo,
-                        refSender: DatabaseReference, refReceiver: DatabaseReference, handleError: (String) -> Boolean){
+        fun sendMessage(message: MessageInfo, refSender: DatabaseReference, refReceiver: DatabaseReference, handleError: (String) -> Boolean){
+
             refSender.push().setValue(message).addOnSuccessListener {
                 Log.d("Message", "Successfully uploaded to Sender ")
             }.addOnFailureListener {
                 it.message?.let { it1 -> handleError(it1) }
             }
+
             refReceiver.push().setValue(message).addOnSuccessListener {
                 Log.d("Message", "Successfully uploaded to Receiver ")
             }.addOnFailureListener {
                 it.message?.let { it1 -> handleError(it1) }
             }
 
-            val refSenderLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.sender}/${message.receiver}")
-            val refReceiverLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.receiver}/${message.sender}")
+            val refSenderLastMsg = FirebaseDatabase.getInstance().getReference("/${LAST_MESSAGE}/${message.sender}/${message.receiver}")
+            val refReceiverLastMsg = FirebaseDatabase.getInstance().getReference("/${LAST_MESSAGE}/${message.receiver}/${message.sender}")
 
             val lastMessage = LastMessageInfo(message.sender,message.content,message.sendTime)
 
@@ -40,35 +48,27 @@ class ChatManagement {
             }
         }
 
-        fun getConversation(userOne: String, userTwo: String, senderRef: DatabaseReference, processConv: (ArrayList<MessageInfo>) -> Boolean, handleError: (String) -> Boolean) {
-            //val uid = FirebaseAuth.getInstance().uid ?: ""
-            //val ref = FirebaseDatabase.getInstance().getReference("/message/$userOne/$userTwo")
-
+        fun getConversation(senderRef: DatabaseReference, processConv: (ArrayList<MessageInfo>) -> Boolean, handleError: (String) -> Boolean) {
             senderRef.get()
                     .addOnSuccessListener {
-                        var list = ArrayList<MessageInfo>()
-                        var hmap: HashMap<Any,Any>
+                        val list = ArrayList<MessageInfo>()
+                        val hmap: HashMap<Any,Any>
 
                         if(it.value != null){
                             hmap = it.value as HashMap<Any,Any>
-//                            hmap = it.value as HashMap<String, MessageInfo>
                             Log.d("ReadConv", "Start to read")
-                            for( (key,msg) in hmap){
+                            for((_,msg) in hmap){
                                 Log.d("ReadConv", msg.toString())
-                                var msgMap = msg as HashMap<String, Any>
-                                if(msgMap != null){
-                                    var sender = msgMap.get("sender") as String?
-                                    var receiver = msgMap.get("receiver") as String?
-                                    var content = msgMap.get("content") as String?
-                                    var sendTime =  msgMap.get("sendTime") as String?
-                                    if(sender != null && receiver != null && content != null && sendTime != null){
-                                        var msg = MessageInfo(sender, receiver, content, sendTime)
-                                        Log.d("ReadConv", msg.content)
-                                        list.add(msg)
-                                    }
-
+                                val msgMap = msg as HashMap<String, Any>
+                                val sender = msgMap[SENDER] as String?
+                                val receiver = msgMap[RECEIVER] as String?
+                                val content = msgMap[CONTENT] as String?
+                                val sendTime =  msgMap[SEND_TIME] as String?
+                                if(sender != null && receiver != null && content != null && sendTime != null){
+                                    val message = MessageInfo(sender, receiver, content, sendTime)
+                                    Log.d("ReadConv", message.content)
+                                    list.add(message)
                                 }
-
                             }
                             Log.d("ReadConv", "already read")
                             processConv(list)
@@ -76,14 +76,11 @@ class ChatManagement {
                             processConv(list)
                             Log.d("ReadConv", "Cannot get data")
                         }
-                        //Log.d("ReadConv", "info read: $value")
                     }
                     .addOnFailureListener{
                         it.message?.let { it1 -> handleError(it1) }
                         Log.d("ReadInfo", "Failed to read info")
                     }
         }
-
-
     }
 }

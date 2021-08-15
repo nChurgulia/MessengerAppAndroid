@@ -1,4 +1,4 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.data
 
 import java.util.*
 

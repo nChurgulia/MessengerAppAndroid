@@ -1,4 +1,4 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.presenter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import ge.nchurguliaXmchkhaidze.messengerapp.R
+import ge.nchurguliaXmchkhaidze.messengerapp.data.UserInfo
 
 class UserSearchAdapter(private val listListener: IUserSearch) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var list = mutableListOf<UserInfo>()

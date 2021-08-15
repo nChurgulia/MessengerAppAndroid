@@ -22,4 +22,7 @@
     <string name="chat_user_job">chatUserJob</string>
     <string name="chat_user_photo">chatUserPhoto</string>
     <string name="new_conv">Start new conversation</string>
+    <string name="chatUserUid">uid</string>
+    <string name="email_addr">email address</string>
+    <string name="username">username</string>
 </resources>

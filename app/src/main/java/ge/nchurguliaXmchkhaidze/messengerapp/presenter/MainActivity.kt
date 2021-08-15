@@ -1,4 +1,4 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.presenter
 
 import android.app.Activity
 import android.content.Context
@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import ge.nchurguliaXmchkhaidze.messengerapp.R
 
 
 class MainActivity : AppCompatActivity() {

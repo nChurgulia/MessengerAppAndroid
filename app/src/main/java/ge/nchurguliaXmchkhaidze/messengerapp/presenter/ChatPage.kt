@@ -1,4 +1,4 @@
-package ge.nchurguliaXmchkhaidze.messengerapp
+package ge.nchurguliaXmchkhaidze.messengerapp.presenter
 
 import android.app.Activity
 import android.os.Bundle
@@ -15,8 +15,11 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import ge.nchurguliaXmchkhaidze.messengerapp.data.MessageInfo
+import ge.nchurguliaXmchkhaidze.messengerapp.model.ChatManagement
 import java.util.*
 import kotlin.collections.ArrayList
+import ge.nchurguliaXmchkhaidze.messengerapp.R
 
 
 class ChatPage : AppCompatActivity(), IErrorHandler {
@@ -41,7 +44,7 @@ class ChatPage : AppCompatActivity(), IErrorHandler {
 
     private fun loadChat(){
         startLoader()
-        ChatManagement.getConversation(sender, receiver, refSender, this::endLoadingChat, this::handleError)
+        ChatManagement.getConversation(refSender, this::endLoadingChat, this::handleError)
     }
 
     private fun endLoadingChat(chat: ArrayList<MessageInfo>) : Boolean{
@@ -57,7 +60,6 @@ class ChatPage : AppCompatActivity(), IErrorHandler {
             adapter.notifyDataSetChanged()
             scrollChat()
         }
-
         return true
     }
 
@@ -66,29 +68,26 @@ class ChatPage : AppCompatActivity(), IErrorHandler {
     }
 
     private fun initReferences(){
-        refSender = FirebaseDatabase.getInstance().getReference("/messages/$sender/$receiver")
-        refReceiver = FirebaseDatabase.getInstance().getReference("/messages/$receiver/$sender")
+        refSender = FirebaseDatabase.getInstance().getReference("/${MESSAGES}/$sender/$receiver")
+        refReceiver = FirebaseDatabase.getInstance().getReference("/${MESSAGES}/$receiver/$sender")
         refSender.addChildEventListener( object: ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatMessage = snapshot.getValue(MessageInfo::class.java)
                 if(chatMessage != null){
                     if(chatMessage.sender != sender){
-                        Log.d("DataChanged", "Data got")
                         Log.d("DataChanged", chatMessage.content)
                         list.add(chatMessage)
                         adapter.list = list
                         adapter.notifyDataSetChanged()
                         scrollChat()
                     }
-
                 }else{
                     Log.d("DataChanged", "Something Failed")
                 }
-
-
             }
 
             override fun onCancelled(error: DatabaseError) {
+                handleError(error.message)
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -98,9 +97,7 @@ class ChatPage : AppCompatActivity(), IErrorHandler {
             }
             override fun onChildRemoved(snapshot: DataSnapshot) {
             }
-        }
-
-        )
+        })
     }
 
     override fun onBackPressed() {
@@ -114,8 +111,7 @@ class ChatPage : AppCompatActivity(), IErrorHandler {
         val extras = intent.extras
         if (extras != null) {
             findViewById<TextView>(titleId).text = extras.get(getString(R.string.chat_user)).toString()
-            receiver = extras.get("uid").toString()
-            Log.d("CHECKUID", receiver)
+            receiver = extras.get(UID).toString()
             findViewById<TextView>(subTitleId).text = extras.get(getString(R.string.chat_user_job)).toString()
             Glide.with(this).load(extras.get(getString(R.string.chat_user_photo)).toString()).into(findViewById(R.id. profile_pic))
         }
@@ -185,6 +181,8 @@ class ChatPage : AppCompatActivity(), IErrorHandler {
         const val COLLAPSED_TITLE_SIZE = 16.0F
         const val COLLAPSED_SUBTITLE_SIZE = 10.0F
         const val COLLAPSED_PADDING = 0
+        const val MESSAGES = "messages"
+        const val UID = "uid"
     }
 
 }
