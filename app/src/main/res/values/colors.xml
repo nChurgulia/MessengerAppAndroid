@@ -13,4 +13,5 @@
     <color name="msg_field_color">#F4F4F4</color>
     <color name="dot_color">#494A63</color>
     <color name="magnifier_color">#5A5A5A</color>
+    <color name="imageFrameColor">#68B3FF</color>
 </resources>

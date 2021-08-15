@@ -1,6 +1,5 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import java.security.AccessController.getContext
 
-class UserSearchAdapter(private val listListener: UserSearchInterface) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class UserSearchAdapter(private val listListener: IUserSearch) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var list = mutableListOf<UserInfo>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

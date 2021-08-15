@@ -51,9 +51,24 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:indicatorColor="@color/button_color"
+            android:indeterminate="true" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:overScrollMode="never"
         android:id="@+id/SearchPageRV"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
@@ -88,7 +103,7 @@
                 app:elevation="0dp"
                 app:labelVisibilityMode="unlabeled"
                 app:menu="@menu/bottom_app_bar_menu"
-                app:itemIconTint="@color/bottom_tab_bar_color" />
+                app:itemIconTint="@color/bottom_tab_bar_color"/>
         </LinearLayout>
     </com.google.android.material.bottomappbar.BottomAppBar>
 

@@ -15,7 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import java.net.URL
 
-class ProfilePage : AppCompatActivity() {
+class ProfilePage : AppCompatActivity(), IErrorHandler {
     private var photoUri : Uri? = null
     private var photoURL : String? = null
 
@@ -63,10 +63,12 @@ class ProfilePage : AppCompatActivity() {
     }
 
     private fun displayInfo(){
-        ManageInfo.getInfo(this::endDisplayInfo)
-
+        startLoader()
+        ManageInfo.getInfo(this::endDisplayInfo, this::handleError)
     }
+
     private  fun endDisplayInfo(nick: String, job: String, url: String) : Boolean{
+        stopLoader()
         // photo
         photoURL = url
         Glide.with(this).load(url).into(photoView)
@@ -76,8 +78,6 @@ class ProfilePage : AppCompatActivity() {
         nickView.text = nick
         return true
     }
-
-
 
     private fun setUpUpdate(){
         updateButton.setOnClickListener {
@@ -94,10 +94,9 @@ class ProfilePage : AppCompatActivity() {
 
     private fun updateInfo() {
         if (jobView.text.toString() == "") {
-            showWarning(R.id.job_pr, getString(R.string.empty_job))
+            showWarning(getString(R.string.empty_job), jobView, findViewById(R.id.add_btn))
         }else{
-            Log.d("KETDEBA RAME??", "movedi")
-            ManageInfo.uploadUserInformation(nickView.text.toString(), jobView.text.toString(), photoUri, photoURL!!, null)
+            ManageInfo.uploadUserInformation(nickView.text.toString(), jobView.text.toString(), photoUri, photoURL!!, null, this::handleError)
         }
     }
 
@@ -107,9 +106,6 @@ class ProfilePage : AppCompatActivity() {
             startActivityForResult(gallery, OPEN_GALLERY)
         }
     }
-
-
-
 
     private fun setUpNavBar(){
         val navView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
@@ -129,6 +125,11 @@ class ProfilePage : AppCompatActivity() {
         findViewById<FloatingActionButton>(R.id.add_btn).setOnClickListener {
             goToPage(this, UserSearchPage::class.java)
         }
+    }
+
+    override fun handleError(err: String): Boolean {
+        showWarning(err, findViewById(R.id.update))
+        return true
     }
 
     companion object {

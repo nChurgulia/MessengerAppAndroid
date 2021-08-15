@@ -1,8 +1,6 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.util.*
@@ -12,28 +10,37 @@ class ChatManagement {
     companion object{
 
         fun sendMessage(message: MessageInfo,
-                        refSender: DatabaseReference, refReceiver: DatabaseReference ){
+                        refSender: DatabaseReference, refReceiver: DatabaseReference, handleError: (String) -> Boolean){
             refSender.push().setValue(message).addOnSuccessListener {
                 Log.d("Message", "Successfully uploaded to Sender ")
+            }.addOnFailureListener {
+                it.message?.let { it1 -> handleError(it1) }
             }
             refReceiver.push().setValue(message).addOnSuccessListener {
                 Log.d("Message", "Successfully uploaded to Receiver ")
+            }.addOnFailureListener {
+                it.message?.let { it1 -> handleError(it1) }
             }
 
-            var refSenderLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.sender}/${message.receiver}")
-            var refReceiverLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.receiver}/${message.sender}")
+            val refSenderLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.sender}/${message.receiver}")
+            val refReceiverLastMsg = FirebaseDatabase.getInstance().getReference("/last-message/${message.receiver}/${message.sender}")
 
-            var lastMessage = LastMessageInfo(message.sender,message.content,message.sendTime)
+            val lastMessage = LastMessageInfo(message.sender,message.content,message.sendTime)
 
             refSenderLastMsg.setValue(lastMessage).addOnSuccessListener {
                 Log.d("LastMessage", "Successfuly saved for sender")
+            }.addOnFailureListener {
+                it.message?.let { it1 -> handleError(it1) }
             }
+
             refReceiverLastMsg.setValue(lastMessage).addOnSuccessListener {
                 Log.d("LastMessage", "Successfuly saved for receiver")
+            }.addOnFailureListener {
+                it.message?.let { it1 -> handleError(it1) }
             }
         }
 
-        fun getConversation(userOne: String, userTwo: String, senderRef: DatabaseReference, processConv: (ArrayList<MessageInfo>) -> Boolean) {
+        fun getConversation(userOne: String, userTwo: String, senderRef: DatabaseReference, processConv: (ArrayList<MessageInfo>) -> Boolean, handleError: (String) -> Boolean) {
             //val uid = FirebaseAuth.getInstance().uid ?: ""
             //val ref = FirebaseDatabase.getInstance().getReference("/message/$userOne/$userTwo")
 
@@ -66,11 +73,13 @@ class ChatManagement {
                             Log.d("ReadConv", "already read")
                             processConv(list)
                         }else{
+                            processConv(list)
                             Log.d("ReadConv", "Cannot get data")
                         }
                         //Log.d("ReadConv", "info read: $value")
                     }
                     .addOnFailureListener{
+                        it.message?.let { it1 -> handleError(it1) }
                         Log.d("ReadInfo", "Failed to read info")
                     }
         }

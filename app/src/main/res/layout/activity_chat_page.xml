@@ -90,6 +90,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="@dimen/chat_image_size"
+                            android:backgroundTint="@color/imageFrameColor"
                             app:cardElevation="0dp"
                             android:layout_gravity="center_vertical|end">
 
@@ -106,6 +107,20 @@
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:gravity="center">
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:indicatorColor="@color/button_color"
+                android:indeterminate="true" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/messages"
@@ -136,7 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/textfield_margin"
-            android:background="@drawable/textfield_background"
+            android:background="@drawable/search_view_background"
             android:backgroundTint="@color/msg_field_color"
             android:hint="@string/message"
             android:padding="@dimen/msg_field_padding"/>

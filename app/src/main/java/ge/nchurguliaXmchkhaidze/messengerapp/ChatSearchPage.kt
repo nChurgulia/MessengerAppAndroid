@@ -7,27 +7,27 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.tasks.await
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.GenericTypeIndicator
+import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.android.schedulers.AndroidSchedulers
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
-class ChatSearchPage : AppCompatActivity(), UserSearchInterface {
+class ChatSearchPage : AppCompatActivity(), IUserSearch, IErrorHandler {
+    private lateinit var currList: ArrayList<ChatInfo>
+    private lateinit var secondPageA: SearchPageAdapter
+
     @SuppressLint("ClickableViewAccessibility")
-    lateinit var currList: ArrayList<ChatInfo>
-    lateinit var secondPageA: SearchPageAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_search_page)
-        var chatPageRV = findViewById<RecyclerView>(R.id.SearchPageRV)
-        currList = ArrayList<ChatInfo>()
+
+        currList = ArrayList()
         secondPageA = SearchPageAdapter(this,  this)
         secondPageA.items = currList
+        val chatPageRV = findViewById<RecyclerView>(R.id.SearchPageRV)
         chatPageRV.adapter = secondPageA
         chatPageRV.layoutManager = LinearLayoutManager(this)
         chatPageRV.setOnTouchListener { v, event ->
@@ -35,8 +35,12 @@ class ChatSearchPage : AppCompatActivity(), UserSearchInterface {
             hideSoftInputFromWindow(findViewById<EditText>(R.id.search_field).windowToken, 0)
             v?.onTouchEvent(event) ?: true
         }
+
+        setUpSearch()
         setUpNavBar()
-        LastMessageManagement.getLastMessageInfo(this::processData)
+        hideSoftKeyboard(R.id.search_field)
+        startLoader()
+        LastMessageManagement.getLastMessageInfo(this::processData, this::handleError)
     }
 
 
@@ -46,19 +50,24 @@ class ChatSearchPage : AppCompatActivity(), UserSearchInterface {
     }
 
     private fun processData(data: ArrayList<LastMessageInfo>): Boolean{
-        currList.clear()
-        for(item in data){
-            var fromId = item.fromId
-            var content = item.content
-            var sendTime = item.sendTime
-            val date = formatTime(Date(sendTime))
-            LastMessageManagement.loadUserData(fromId, content, date, this::loadOneUser)
+        stopLoader()
+        if (data.isEmpty()){
+            showWarning(getString(R.string.no_data), findViewById(R.id.search_field), findViewById(R.id.add_btn))
+        }else {
+            currList.clear()
+            for (item in data) {
+                val fromId = item.fromId
+                val content = item.content
+                val sendTime = item.sendTime
+                LastMessageManagement.loadUserData(fromId, content, sendTime, this::loadOneUser, this::handleError)
+            }
         }
         return true
     }
 
     private fun loadOneUser(currData: ChatInfo): Boolean{
         currList.add(currData)
+        currList.sortedWith(compareBy { Date(currData.timeAgo) }).reversed()
         secondPageA.items = currList
         secondPageA.notifyDataSetChanged()
         return true
@@ -88,24 +97,57 @@ class ChatSearchPage : AppCompatActivity(), UserSearchInterface {
         goToPage(this, ChatPage::class.java, extras)
     }
 
-    private fun formatTime(date: Date): String {
+    @SuppressLint("CheckResult")
+    private fun setUpSearch() {
+        val searchView = findViewById<EditText>(R.id.search_field)
 
-        val diff: Long = Date().time - date.time
-        val seconds = diff / 1000
-        val minutes = seconds / 60
-        val hours = minutes / 60
-        val days = hours / 24
+        RxTextView.textChanges(searchView)
+                .map { charSequence ->
+                    charSequence.toString().trim()
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    filterChats(it)
+                }
+    }
 
-        return when {
-            (days > 0) -> {
-                SimpleDateFormat("d MMM").format(date).toUpperCase()
-            }
-            (hours > 0) -> {
-                "$hours hour"
-            }
-            else -> {
-                "$minutes min"
+    private fun filterChats(prefix: String){
+        val chats = ArrayList<ChatInfo>()
+
+        for (i in currList) {
+            if (i.name.startsWith(prefix)){
+                chats.add(i)
             }
         }
+        secondPageA.items = chats
+        secondPageA.notifyDataSetChanged()
+    }
+
+    companion object {
+        fun formatTime(date: Date): String {
+
+            val diff: Long = Date().time - date.time
+            val seconds = diff / 1000
+            val minutes = seconds / 60
+            val hours = minutes / 60
+            val days = hours / 24
+
+            return when {
+                (days > 0) -> {
+                    SimpleDateFormat("d MMM").format(date).toUpperCase()
+                }
+                (hours > 0) -> {
+                    "$hours hour"
+                }
+                else -> {
+                    "$minutes min"
+                }
+            }
+        }
+    }
+
+    override fun handleError(err: String): Boolean {
+        showWarning(err, findViewById(R.id.search_field))
+        return true
     }
 }
