@@ -90,6 +90,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="@dimen/chat_image_size"
+                            android:backgroundTint="@color/imageFrameColor"
                             app:cardElevation="0dp"
                             android:layout_gravity="center_vertical|end">
 
@@ -150,7 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/textfield_margin"
-            android:background="@drawable/textfield_background"
+            android:background="@drawable/search_view_background"
             android:backgroundTint="@color/msg_field_color"
             android:hint="@string/message"
             android:padding="@dimen/msg_field_padding"/>

@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 
-class SignUpPage : AppCompatActivity() {
+class SignUpPage : AppCompatActivity(), IErrorHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up_page)
@@ -26,7 +26,7 @@ class SignUpPage : AppCompatActivity() {
                 nick == "" -> showWarning(getString(R.string.empty_nick), findViewById(R.id.sign_up))
                 pass == "" -> showWarning(getString(R.string.empty_pass), findViewById(R.id.sign_up, ))
                 job == ""-> showWarning(getString(R.string.empty_job), findViewById(R.id.sign_up, ))
-                else -> AccountAccess.signUp(nick + getString(R.string.mail_suffix), pass, job, this::goToConversations)
+                else -> AccountAccess.signUp(nick + getString(R.string.mail_suffix), pass, job, this::goToConversations, this::handleError)
             }
         }
     }
@@ -34,6 +34,12 @@ class SignUpPage : AppCompatActivity() {
     private fun goToConversations() : Boolean {
         goToPage(this, ChatSearchPage::class.java)
         return false
+    }
+
+    override fun handleError(err: String): Boolean {
+        val newErr = err.replace("email address", "username", true)
+        showWarning(newErr, findViewById<Button>(R.id.sign_up))
+        return true
     }
 
 }

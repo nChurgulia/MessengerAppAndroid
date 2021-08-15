@@ -16,7 +16,7 @@ class ManageInfo {
         const val PHOTO = "photo"
         const val UID = "uid"
 
-        fun uploadPhoto(imageUri: Uri?){
+        fun uploadPhoto(imageUri: Uri?, handleError: (String) -> Boolean){
             if(imageUri == null) return
             val filename = UUID.randomUUID().toString()
             val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
@@ -25,32 +25,34 @@ class ManageInfo {
                         Log.d("Storage", "Succesfully uploaded image ${it.metadata?.path}")
                         ref.downloadUrl.addOnSuccessListener {
                             Log.d("Storage", "Photo URL is: $it")
-                            uploadInfo("photo", it.toString())
+                            uploadInfo("photo", it.toString(), handleError)
                         }
+                    }.addOnFailureListener{
+                        it.message?.let { it1 -> handleError(it1) }
                     }
         }
 
-        fun uploadJob(profession: String){
-            uploadInfo("job", profession)
+        fun uploadJob(profession: String, handleError: (String) -> Boolean){
+            uploadInfo("job", profession, handleError)
         }
-        fun uploadNick(nickname: String){
-            uploadInfo("nick", nickname)
-        }
-
-
-
-        fun getNick(processInfo: (String) -> Boolean)  {
-
-            getInfo("nick", processInfo)
-        }
-        fun getJob(processInfo: (String) -> Boolean)  {
-            getInfo("job", processInfo)
-        }
-        fun getPhoto(processInfo: (String) -> Boolean) {
-            getInfo("photo", processInfo)
+        fun uploadNick(nickname: String, handleError: (String) -> Boolean){
+            uploadInfo("nick", nickname, handleError)
         }
 
-        private fun getInfo(column: String, processInfo: (String) -> Boolean){
+
+
+        fun getNick(processInfo: (String) -> Boolean, handleError: (String) -> Boolean)  {
+
+            getInfo("nick", processInfo, handleError)
+        }
+        fun getJob(processInfo: (String) -> Boolean, handleError: (String) -> Boolean)  {
+            getInfo("job", processInfo, handleError)
+        }
+        fun getPhoto(processInfo: (String) -> Boolean, handleError: (String) -> Boolean) {
+            getInfo("photo", processInfo, handleError)
+        }
+
+        private fun getInfo(column: String, processInfo: (String) -> Boolean, handleError: (String) -> Boolean){
             val uid = FirebaseAuth.getInstance().uid ?: ""
             val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
@@ -67,11 +69,12 @@ class ManageInfo {
                     processInfo(value)
                 }
                 .addOnFailureListener{
+                    it.message?.let { it1 -> handleError(it1) }
                     Log.d("ReadInfo", "Failed to read info")
                 }
         }
 
-         private fun uploadInfo(column: String, info: String){
+         private fun uploadInfo(column: String, info: String, handleError: (String) -> Boolean){
             val uid = FirebaseAuth.getInstance().uid ?: ""
             val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
@@ -80,6 +83,7 @@ class ManageInfo {
                         Log.d("UserInfo", "info added: $info")
                     }
                     .addOnFailureListener{
+                        it.message?.let { it1 -> handleError(it1) }
                         Log.d("UserInfo", "Failed to add info")
 //                        showWarning(R.id.job_pr, it.toString())
                     }

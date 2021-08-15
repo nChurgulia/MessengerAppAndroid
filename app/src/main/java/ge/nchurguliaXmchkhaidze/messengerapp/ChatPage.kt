@@ -19,7 +19,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ChatPage : AppCompatActivity() {
+class ChatPage : AppCompatActivity(), IErrorHandler {
     private var list: ArrayList<MessageInfo> = ArrayList()
     private var adapter = ConversationPageAdapter()
     private lateinit var refSender: DatabaseReference
@@ -41,18 +41,23 @@ class ChatPage : AppCompatActivity() {
 
     private fun loadChat(){
         startLoader()
-        ChatManagement.getConversation(sender,receiver,refSender,this::endLoadingChat)
+        ChatManagement.getConversation(sender, receiver, refSender, this::endLoadingChat, this::handleError)
     }
 
     private fun endLoadingChat(chat: ArrayList<MessageInfo>) : Boolean{
         stopLoader()
-        list = chat
 
-        val sortedChat = list.sortedWith(compareBy { Date(it.sendTime) })
-        list = ArrayList(sortedChat)
-        adapter.list = list
-        adapter.notifyDataSetChanged()
-        scrollChat()
+        if (chat.isEmpty()){
+            showWarning(getString(R.string.new_conv), findViewById(R.id.messages))
+        }else{
+            list = chat
+            val sortedChat = list.sortedWith(compareBy { Date(it.sendTime) })
+            list = ArrayList(sortedChat)
+            adapter.list = list
+            adapter.notifyDataSetChanged()
+            scrollChat()
+        }
+
         return true
     }
 
@@ -159,13 +164,18 @@ class ChatPage : AppCompatActivity() {
             if(txt != "") {
                 val msg = MessageInfo(sender, receiver, txt, Date().toString())
                 list.add(msg)
-                ChatManagement.sendMessage(msg,refSender,refReceiver)
+                ChatManagement.sendMessage(msg, refSender, refReceiver, this::handleError)
                 adapter.list = list
                 adapter.notifyDataSetChanged()
                 findViewById<TextInputEditText>(msgId).text = null
                 scrollChat()
             }
         }
+    }
+
+    override fun handleError(err: String): Boolean {
+        showWarning(err, findViewById(R.id.message_txt))
+        return true
     }
 
     companion object {
@@ -176,6 +186,7 @@ class ChatPage : AppCompatActivity() {
         const val COLLAPSED_SUBTITLE_SIZE = 10.0F
         const val COLLAPSED_PADDING = 0
     }
+
 }
 
 fun Activity.scrollChat(){

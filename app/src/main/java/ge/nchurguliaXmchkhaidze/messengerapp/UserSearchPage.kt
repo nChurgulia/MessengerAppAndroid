@@ -12,7 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
 
 
-class UserSearchPage : AppCompatActivity(), IUserSearch {
+class UserSearchPage : AppCompatActivity(), IUserSearch, IErrorHandler {
     private var adapter = UserSearchAdapter(this)
     private var userMng = UserSearchManagement()
 
@@ -106,11 +106,16 @@ class UserSearchPage : AppCompatActivity(), IUserSearch {
 
     fun loadData(){
         startLoader()
-        userMng.lazyLoadUsers(this::updateUserList)
+        userMng.lazyLoadUsers(this::updateUserList, this::handleError)
     }
 
     companion object {
         const val SEARCH_LENGTH = 3
         const val SEARCH_TIMEOUT: Long = 1000
+    }
+
+    override fun handleError(err: String): Boolean {
+        showWarning(err, findViewById(R.id.search_field))
+        return true
     }
 }

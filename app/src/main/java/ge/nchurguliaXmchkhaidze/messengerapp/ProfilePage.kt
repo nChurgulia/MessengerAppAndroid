@@ -13,7 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 
-class ProfilePage : AppCompatActivity() {
+class ProfilePage : AppCompatActivity(), IErrorHandler {
     private var photoUri : Uri? = null
 
     private lateinit var nickView: TextView
@@ -61,9 +61,9 @@ class ProfilePage : AppCompatActivity() {
     private fun displayInfo(){
 
         startLoader()
-        ManageInfo.getNick(this::displayNick)
-        ManageInfo.getJob(this::displayJob)
-        ManageInfo.getPhoto(this::displayPhoto)
+        ManageInfo.getNick(this::displayNick, this::handleError)
+        ManageInfo.getJob(this::displayJob, this::handleError)
+        ManageInfo.getPhoto(this::displayPhoto, this::handleError)
     }
 
     private fun displayPhoto(url:String): Boolean{
@@ -100,8 +100,8 @@ class ProfilePage : AppCompatActivity() {
         if (jobView.text.toString() == "") {
             showWarning(getString(R.string.empty_job), jobView, findViewById(R.id.add_btn))
         }else{
-            ManageInfo.uploadPhoto(photoUri)
-            ManageInfo.uploadJob(jobView.text.toString())
+            ManageInfo.uploadPhoto(photoUri, this::handleError)
+            ManageInfo.uploadJob(jobView.text.toString(), this::handleError)
         }
     }
 
@@ -133,6 +133,11 @@ class ProfilePage : AppCompatActivity() {
         findViewById<FloatingActionButton>(R.id.add_btn).setOnClickListener {
             goToPage(this, UserSearchPage::class.java)
         }
+    }
+
+    override fun handleError(err: String): Boolean {
+        showWarning(err, findViewById(R.id.update))
+        return true
     }
 
     companion object {

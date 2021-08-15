@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ChatSearchPage : AppCompatActivity(), IUserSearch {
+class ChatSearchPage : AppCompatActivity(), IUserSearch, IErrorHandler {
     private lateinit var currList: ArrayList<ChatInfo>
     private lateinit var secondPageA: SearchPageAdapter
 
@@ -40,7 +40,7 @@ class ChatSearchPage : AppCompatActivity(), IUserSearch {
         setUpNavBar()
         hideSoftKeyboard(R.id.search_field)
         startLoader()
-        LastMessageManagement.getLastMessageInfo(this::processData)
+        LastMessageManagement.getLastMessageInfo(this::processData, this::handleError)
 
     }
 
@@ -60,7 +60,7 @@ class ChatSearchPage : AppCompatActivity(), IUserSearch {
                 val fromId = item.fromId
                 val content = item.content
                 val sendTime = item.sendTime
-                LastMessageManagement.loadUserData(fromId, content, sendTime, this::loadOneUser)
+                LastMessageManagement.loadUserData(fromId, content, sendTime, this::loadOneUser, this::handleError)
             }
         }
 
@@ -146,5 +146,10 @@ class ChatSearchPage : AppCompatActivity(), IUserSearch {
                 }
             }
         }
+    }
+
+    override fun handleError(err: String): Boolean {
+        showWarning(err, findViewById(R.id.search_field))
+        return true
     }
 }

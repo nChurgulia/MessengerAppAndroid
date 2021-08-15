@@ -1,5 +1,6 @@
 package ge.nchurguliaXmchkhaidze.messengerapp
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.util.*
@@ -9,7 +10,7 @@ import kotlin.collections.HashMap
 class LastMessageManagement {
     companion object{
 
-        fun getLastMessageInfo(processLastMessage: (ArrayList<LastMessageInfo>) -> (Boolean) ) {
+        fun getLastMessageInfo(processLastMessage: (ArrayList<LastMessageInfo>) -> (Boolean), handleError: (String) -> (Boolean)) {
             val uid = FirebaseAuth.getInstance().uid!!
             val refCurrentUser = FirebaseDatabase.getInstance().getReference("/last-message/$uid")
             var list = ArrayList<LastMessageInfo>()
@@ -33,10 +34,12 @@ class LastMessageManagement {
                 }else{
                     processLastMessage(ArrayList())
                 }
+            }.addOnFailureListener {
+                it.message?.let { it1 -> handleError(it1) }
             }
         }
 
-        fun loadUserData(fromId: String, content: String, date: String, loadOneUser: (ChatInfo) -> (Boolean)) {
+        fun loadUserData(fromId: String, content: String, date: String, loadOneUser: (ChatInfo) -> (Boolean), handleError: (String) -> (Boolean)) {
 
             val ref = FirebaseDatabase.getInstance().getReference("/users/$fromId")
             ref.get().addOnSuccessListener {
@@ -46,6 +49,8 @@ class LastMessageManagement {
                 val photo = hMap["photo"]!! as String
                 val curr = ChatInfo(nickname, fromId, content, date, job, photo)
                 loadOneUser(curr)
+            }.addOnFailureListener {
+                it.message?.let { it1 -> handleError(it1) }
             }
         }
     }

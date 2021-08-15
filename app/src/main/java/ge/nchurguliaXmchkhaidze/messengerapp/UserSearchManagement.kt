@@ -8,7 +8,7 @@ class UserSearchManagement {
     var lastNode: String? = ""
     var keyword: String? = ""
 
-    fun lazyLoadUsers(updateData: (uid: String?, nickname: String?, job: String?, photo: String?) -> Boolean) {
+    fun lazyLoadUsers(updateData: (uid: String?, nickname: String?, job: String?, photo: String?) -> Boolean, handleError: (String) -> Boolean) {
         val query: Query
 
         if (keyword == "") {
@@ -51,7 +51,7 @@ class UserSearchManagement {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                handleError(error.message)
             }
         })
     }
